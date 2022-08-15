@@ -7,7 +7,7 @@
             <div class="text-center">
                 <h1 class="h2">PM Gaspol &#x1f44b;</h1>
                 <p class="lead">Log in to your account to continue</p>
-                <form>
+                <form action="<?= base_url(); ?>/auth/loginSave">
                     <div class="form-group">
                         <input class="form-control" type="email" placeholder="Email Address" name="login-email" />
                     </div>
@@ -21,7 +21,7 @@
                     <button class="btn btn-lg btn-block btn-primary" role="button" type="submit">
                         Log in
                     </button>
-                    <small>Don't have an account yet? <a href="#">Create one</a>
+                    <small>Don't have an account yet? <a href="<?= base_url(); ?>/auth/register">Create one</a>
                     </small>
                 </form>
             </div>
