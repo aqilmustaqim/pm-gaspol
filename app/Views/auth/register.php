@@ -8,12 +8,15 @@
                 <h1 class="h2">Create account PM Gaspol</h1>
                 <p class="lead">Start doing things for free, in an instant</p>
                 <hr>
-                <form>
+                <form action="<?= base_url(); ?>/auth/registerSave" method="post">
                     <div class="form-group">
-                        <input class="form-control" type="email" placeholder="Email Address" name="create-account-email" />
+                        <input class="form-control" type="text" placeholder="Name" name="nama" />
                     </div>
                     <div class="form-group">
-                        <input class="form-control" type="password" placeholder="Password" name="create-account-password" />
+                        <input class="form-control" type="email" placeholder="Email Address" name="email" />
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="password" placeholder="Password" name="password" />
                         <div class="text-left">
                             <small>Your password should be at least 8 characters</small>
                         </div>
