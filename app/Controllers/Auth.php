@@ -16,6 +16,15 @@ class Auth extends BaseController
 
     public function index()
     {
+
+        if (session()->get('nama')) {
+            if (session()->get('role_id') == 1) {
+                return redirect()->to(base_url('superadmin'));
+            } else {
+                return redirect()->to(base_url('dashboard'));
+            }
+        }
+
         $data = [
             'title' => 'PM-GASPOL || Login',
             'validation' => \Config\Services::validation()
@@ -108,5 +117,18 @@ class Auth extends BaseController
             session()->setFlashdata('login', 'Email Belum Terdaftar ! ');
             return redirect()->to(base_url());
         }
+    }
+
+    public function logout()
+    {
+        //Hapus Session
+        $dataSession = [
+            'nama',
+            'email',
+            'role_id',
+            'logged_in'
+        ];
+        session()->remove($dataSession);
+        return redirect()->to(base_url());
     }
 }
