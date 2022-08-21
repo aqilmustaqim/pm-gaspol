@@ -10,7 +10,8 @@ class Dashboard extends BaseController
             return redirect()->to(base_url());
         }
         $data = [
-            'title' => 'PM Gaspol || Dashboard'
+            'title' => 'PM Gaspol || Dashboard',
+            'bread' => 'Dashboard'
         ];
 
         return view('dashboard/index', $data);

@@ -93,6 +93,7 @@ class Auth extends BaseController
                         'nama' => $user['nama'],
                         'email' => $user['email'],
                         'role_id' => $user['role_id'],
+                        'foto' => $user['foto'],
                         'logged_in' => TRUE
                     ];
                     session()->set($dataSession);
@@ -126,9 +127,53 @@ class Auth extends BaseController
             'nama',
             'email',
             'role_id',
+            'foto',
             'logged_in'
         ];
         session()->remove($dataSession);
         return redirect()->to(base_url());
+    }
+
+    public function settings()
+    {
+
+        $data = [
+            'title' => 'PM-GASPOL || Account Settings',
+            'bread' => 'Account Setting',
+            'validation' => \Config\Services::validation()
+        ];
+        return view('auth/settings', $data);
+    }
+
+    public function editProfile()
+    {
+        //1. Cek Foto Di Ubah Atau Tidak
+        $fileFoto = $this->request->getFile('foto');
+        $fotoLama = $this->request->getVar('fotoLama');
+        if ($fileFoto->getError() == 4) { //Kalau Fotonya Kosong Berarti ga di ubah 
+            //Ambil Nama Foto Lamanya
+            $namaFoto = $fotoLama;
+        } else {
+            //Kalau Foto Nya Diubah
+            //Ambil Nama File Foto Barunya
+            $namaFoto = $fileFoto->getRandomName();
+            //Masukkan Ke Dalam Folder Image
+            $fileFoto->move('assets/img', $namaFoto);
+            //Hapus File Foto Lama
+            if ($fotoLama != 'default.png') {
+                unlink("assets/img/$fotoLama");
+            }
+        }
+
+        //2. Update Database
+        $user = $this->usersModel->where('email', session()->get('email'))->first();
+        if ($this->usersModel->save([
+            'id' => $user['id'],
+            'nama' => $this->request->getVar('nama'),
+            'foto' => $namaFoto
+        ])) {
+            session()->setFlashdata('profile', 'Update Profile, Silahkan Login Ulang !');
+            return redirect()->to(base_url('auth/settings'));
+        }
     }
 }

@@ -15,7 +15,8 @@ class Superadmin extends BaseController
         }
 
         $data = [
-            'title' => 'PM Gaspol || Dashboard'
+            'title' => 'PM Gaspol || Dashboard',
+            'bread' => 'Dashboard'
         ];
 
         return view('superadmin/index', $data);

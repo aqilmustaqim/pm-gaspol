@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Pipeline Project Management Bootstrap Theme</title>
+    <title><?= $title; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A project management Bootstrap theme by Medium Rare">
     <link href="<?= base_url(); ?>/assets/img/favicon.ico" rel="icon" type="image/x-icon">
@@ -18,7 +18,7 @@
         <div class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top">
 
             <a class="navbar-brand" href="index.html">
-                <img alt="Pipeline" src="assets/img/logo.svg" />
+                <img alt="Pipeline" src="<?= base_url(); ?>/assets/img/logo.svg" />
             </a>
             <div class="d-flex align-items-center">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,91 +27,9 @@
 
             </div>
             <div class="collapse navbar-collapse flex-column" id="navbar-collapse">
-                <ul class="navbar-nav d-lg-block">
-
-                    <li class="nav-item">
-
-                        <a class="nav-link" href="index.html">Overview</a>
-
-                    </li>
-
-                    <li class="nav-item">
-
-                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2">Pages</a>
-                        <div id="submenu-2" class="collapse">
-                            <ul class="nav nav-small flex-column">
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="pages-app.html">App Pages</a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="pages-utility.html">Utility Pages</a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="pages-layouts.html">Layouts</a>
-                                </li>
-
-                            </ul>
-                        </div>
-
-                    </li>
-
-                    <li class="nav-item">
-
-                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3" aria-controls="submenu-3">Components</a>
-                        <div id="submenu-3" class="collapse">
-                            <ul class="nav nav-small flex-column">
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="components-bootstrap.html">Bootstrap</a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="components-pipeline.html">Pipeline</a>
-                                </li>
-
-                            </ul>
-                        </div>
-
-                    </li>
-
-                    <li class="nav-item">
-
-                        <a class="nav-link" href="documentation/index.html">Documentation</a>
-
-                    </li>
-
-                    <li class="nav-item">
-
-                        <a class="nav-link" href="documentation/changelog.html">Changelog</a>
-
-                    </li>
-
-                </ul>
-                <hr>
-                <div class="d-none d-lg-block w-100">
-                    <span class="text-small text-muted">Quick Links</span>
-                    <ul class="nav nav-small flex-column mt-2">
-                        <li class="nav-item">
-                            <a href="nav-side-team.html" class="nav-link">Team Overview</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="nav-side-project.html" class="nav-link">Project</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="nav-side-task.html" class="nav-link">Single Task</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="nav-side-kanban-board.html" class="nav-link">Kanban Board</a>
-                        </li>
-                    </ul>
-                    <hr>
-                </div>
                 <div>
                     <form>
-                        <div class="input-group input-group-dark input-group-round">
+                        <div class="input-group input-group-dark input-group-round mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
                                     <i class="material-icons">search</i>
@@ -122,11 +40,114 @@
                     </form>
 
                 </div>
+                <ul class="navbar-nav d-lg-block">
+
+                    <li class="nav-item">
+
+                        <a class="nav-link" href="<?= base_url(); ?>/<?= (session()->get('role_id') == 1 ? 'superadmin' : 'dashboard'); ?>">Overview</a>
+
+                    </li>
+                    <?php if (session()->get('role_id') == 1) : ?>
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3" aria-controls="submenu-3">Projects</a>
+                            <div id="submenu-3" class="collapse">
+                                <ul class="nav nav-small flex-column">
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="components-bootstrap.html">List Project</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="components-pipeline.html">Add Project</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+
+                        </li>
+                    <?php endif; ?>
+
+
+                    <li class="nav-item">
+
+                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2">Team</a>
+                        <div id="submenu-2" class="collapse">
+                            <ul class="nav nav-small flex-column">
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href="pages-app.html">List Team</a>
+                                </li>
+
+                                <?php if (session()->get('role_id') == 1) : ?>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="pages-utility.html">Add Team</a>
+                                    </li>
+                                <?php endif; ?>
+
+
+                            </ul>
+                        </div>
+
+                    </li>
+
+                    <?php if (session()->get('role_id') == 1) : ?>
+                        <li class="nav-item">
+
+                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4">Member</a>
+                            <div id="submenu-4" class="collapse">
+                                <ul class="nav nav-small flex-column">
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="components-bootstrap.html">List Member</a>
+                                    </li>
+
+
+
+                                </ul>
+                            </div>
+
+                        </li>
+                    <?php endif; ?>
+
+
+
+
+                </ul>
+                <hr>
+                <span>Project Management Pasukan Langit ❤</span>
+
             </div>
 
 
         </div>
-        <?= $this->renderSection('content'); ?>
+        <div class="main-container">
+            <div class="navbar bg-white breadcrumb-bar">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html"><?= $bread; ?></a>
+                        </li>
+
+                    </ol>
+                </nav>
+
+                <div class="dropdown">
+                    <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img alt="Image" src="<?= base_url(); ?>/assets/img/avatar-male-4.jpg" class="avatar" />
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+
+                        <a href="<?= base_url(); ?>/auth/settings" class="dropdown-item">Account Settings</a>
+                        <a href="<?= base_url(); ?>/auth/logout" class="dropdown-item">Log Out</a>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <?= $this->renderSection('content'); ?>
+        </div>
+
     </div>
 
     <!-- Required vendor scripts (Do not remove) -->
@@ -152,6 +173,11 @@
 
     <!-- Required theme scripts (Do not remove) -->
     <script type="text/javascript" src="<?= base_url(); ?>/assets/js/theme.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="<?= base_url(); ?>/assets/js/myscript.js"></script>
 
 </body>
 
