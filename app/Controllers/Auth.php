@@ -17,7 +17,7 @@ class Auth extends BaseController
     public function index()
     {
 
-        if (session()->get('nama')) {
+        if (session()->get('logged_in')) {
             if (session()->get('role_id') == 1) {
                 return redirect()->to(base_url('superadmin'));
             } else {
@@ -136,10 +136,16 @@ class Auth extends BaseController
 
     public function settings()
     {
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url());
+        }
+
+        $user = $this->usersModel->where('email', session()->get('email'))->first();
 
         $data = [
             'title' => 'PM-GASPOL || Account Settings',
             'bread' => 'Account Setting',
+            'user' => $user,
             'validation' => \Config\Services::validation()
         ];
         return view('auth/settings', $data);
@@ -174,6 +180,29 @@ class Auth extends BaseController
         ])) {
             session()->setFlashdata('profile', 'Update Profile, Silahkan Login Ulang !');
             return redirect()->to(base_url('auth/settings'));
+        }
+    }
+
+    public function changePassword()
+    {
+        $passwordlama = $this->request->getPost('passwordlama');
+        $passwordbaru = $this->request->getPost('passwordbaru');
+        $passwordkonfirmasi = $this->request->getPost('passwordkonfirmasi');
+
+        //Ambil Dlu Data Usersnya
+        $user = $this->usersModel->where('email', session()->get('email'))->first();
+        //cek dlu apakah password lama bener
+        if (password_verify($passwordlama, $user['password'])) {
+
+            //Kalau Bener Masukkan Database Password Barunya
+            if ($this->usersModel->save([
+                'id' => $user['id'],
+                'password' => password_hash($passwordbaru, PASSWORD_DEFAULT)
+            ])) {
+                echo 'berhasil';
+            }
+        } else {
+            echo 'passwordsalah';
         }
     }
 }

@@ -22,7 +22,7 @@
                         <div class="tab-pane fade show active" role="tabpanel" id="profile">
                             <form action="<?= base_url(); ?>/auth/editProfile" method="post" enctype="multipart/form-data">
                                 <div class="media mb-4">
-                                    <img alt="Image" src="<?= base_url(); ?>/assets/img/default.png" class="avatar avatar-lg" />
+                                    <img alt="Image" src="<?= base_url(); ?>/assets/img/<?= $user['foto']; ?>" class="avatar avatar-lg" />
                                     <div class="media-body ml-3">
                                         <div class="custom-file custom-file-naked d-block mb-1">
 
@@ -32,7 +32,7 @@
                                                 </span>
                                             </label>
                                             <input type="file" class="form-control" id="foto" name="foto" id="avatar-file">
-                                            <input type="hidden" value="<?= session()->get('foto'); ?>" id="fotoLama" name="fotoLama">
+                                            <input type="hidden" value="<?= $user['foto']; ?>" id="fotoLama" name="fotoLama">
                                         </div>
                                         <small>For best results, use an image at least 256px by 256px in either .jpg or .png format</small>
                                     </div>
@@ -42,14 +42,14 @@
                                 <div class="form-group row align-items-center">
                                     <label class="col-3">Full Name</label>
                                     <div class="col">
-                                        <input type="text" placeholder="Full name" name="nama" id="nama" value="<?= session()->get('nama'); ?>" name="profile-first-name" class="form-control" required />
+                                        <input type="text" placeholder="Full name" name="nama" id="nama" value="<?= $user['nama']; ?>" name="profile-first-name" class="form-control" required />
                                     </div>
                                 </div>
 
                                 <div class="form-group row align-items-center">
                                     <label class="col-3">Email</label>
                                     <div class="col">
-                                        <input type="email" placeholder="Enter your email address" name="email" id="email" name="profile-email" class="form-control" value="<?= session()->get('email'); ?>" readonly required />
+                                        <input type="email" placeholder="Enter your email address" name="email" id="email" name="profile-email" class="form-control" value="<?= $user['email']; ?>" readonly required />
                                     </div>
                                 </div>
 
@@ -59,31 +59,31 @@
                             </form>
                         </div>
                         <div class="tab-pane fade" role="tabpanel" id="password">
-                            <form>
-                                <div class="form-group row align-items-center">
-                                    <label class="col-3">Current Password</label>
-                                    <div class="col">
-                                        <input type="password" placeholder="Enter your current password" name="password-current" class="form-control" />
-                                    </div>
+
+                            <div class="form-group row align-items-center">
+                                <label class="col-3">Current Password</label>
+                                <div class="col">
+                                    <input type="password" placeholder="Enter your current password" name="passwordlama" id="passwordlama" class="form-control" />
                                 </div>
-                                <div class="form-group row align-items-center">
-                                    <label class="col-3">New Password</label>
-                                    <div class="col">
-                                        <input type="password" placeholder="Enter a new password" name="password-new" class="form-control" />
-                                        <small>Password must be at least 8 characters long</small>
-                                    </div>
+                            </div>
+                            <div class="form-group row align-items-center">
+                                <label class="col-3">New Password</label>
+                                <div class="col">
+                                    <input type="password" placeholder="Enter a new password" name="passwordbaru" id="passwordbaru" class="form-control" />
+                                    <small>Password must be at least 8 characters long</small>
                                 </div>
-                                <div class="form-group row align-items-center">
-                                    <label class="col-3">Confirm Password</label>
-                                    <div class="col">
-                                        <input type="password" placeholder="Confirm your new password" name="password-new-confirm" class="form-control" />
-                                    </div>
+                            </div>
+                            <div class="form-group row align-items-center">
+                                <label class="col-3">Confirm Password</label>
+                                <div class="col">
+                                    <input type="password" placeholder="Confirm your new password" name="passwordkonfirmasi" id="passwordkonfirmasi" class="form-control" />
                                 </div>
-                                <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-primary">Change Password</button>
-                                </div>
-                            </form>
-                            <button type="submit" class="btn btn-primary tombol-pw">Change Password</button>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary btn-change-password">Change Password</button>
+                            </div>
+
+
                         </div>
 
                     </div>

@@ -10,6 +10,9 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Gothic+A1" rel="stylesheet">
     <link href="<?= base_url(); ?>/assets/css/theme.css" rel="stylesheet" type="text/css" media="all" />
+
+    <!-- DataTable -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css">
 </head>
 
 <body>
@@ -99,7 +102,7 @@
                                 <ul class="nav nav-small flex-column">
 
                                     <li class="nav-item">
-                                        <a class="nav-link" href="components-bootstrap.html">List Member</a>
+                                        <a class="nav-link" href="<?= base_url(); ?>/member">List Member</a>
                                     </li>
 
 
@@ -109,8 +112,6 @@
 
                         </li>
                     <?php endif; ?>
-
-
 
 
                 </ul>
@@ -133,7 +134,7 @@
 
                 <div class="dropdown">
                     <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img alt="Image" src="<?= base_url(); ?>/assets/img/avatar-male-4.jpg" class="avatar" />
+                        <img alt="Image" src="<?= base_url(); ?>/assets/img/<?= session()->get('foto'); ?>" class="avatar" />
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
 
@@ -176,8 +177,14 @@
 
     <!-- SweetAlert2 -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <!-- DataTable -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
     <script src="<?= base_url(); ?>/assets/js/myscript.js"></script>
+
+    <!-- Font Awesome -->
+    <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
 
 </body>
 

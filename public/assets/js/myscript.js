@@ -1,3 +1,8 @@
+//Data Table
+$(document).ready(function () {
+    $('#example').DataTable();
+});
+
 //Flash Data
 const swal = $('.profile').data('profile'); //Ambil Data FlashDatanya
 if ( swal ){
@@ -12,6 +17,68 @@ if ( swal ){
         }
       })
 }
+
+$('.btn-change-password').on('click',function(){
+    let passwordlama = $('#passwordlama').val();
+    let passwordbaru = $('#passwordbaru').val();
+    let passwordkonfirmasi = $('#passwordkonfirmasi').val();
+
+    if(passwordlama == ''){
+        Swal.fire({
+            title: 'Change Password ',
+            text: 'Password Lama Tidak Boleh Kosong !',
+            icon: 'error'
+        });
+    }else if(passwordbaru.length < 8){
+        Swal.fire({
+            title: 'Change Password ',
+            text: 'Password Minimal 8 Karakter !',
+            icon: 'error'
+        });
+    }else if(passwordbaru == ''){
+        Swal.fire({
+            title: 'Change Password ',
+            text: 'Password Baru Tidak Boleh Kosong !',
+            icon: 'error'
+        });
+    }else if(passwordkonfirmasi != passwordbaru){
+        Swal.fire({
+            title: 'Change Password ',
+            text: 'Password Konfirmasi Harus Match Dengan Password !',
+            icon: 'error'
+        });
+    }else{
+          $.ajax({
+            method: "POST",
+            url: "/auth/changePassword",
+            data: {
+              passwordlama : passwordlama,
+              passwordbaru : passwordbaru,
+              passwordkonfirmasi : passwordkonfirmasi
+            },
+            success: function(data){
+              if(data == "passwordsalah"){
+                Swal.fire({
+                  title: 'Change Password',
+                  text: 'Password Lama Salah !',
+                  icon: 'error'
+                })
+              }else if(data == "berhasil"){
+                Swal.fire({
+                    title: 'Change Password',
+                    text: 'Berhasil Di Ubah Silahkan Login Ulang !',
+                    icon: 'success'
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href="/auth/logout";
+                    }
+                  })
+              }
+      
+            }
+        });
+    }
+});
 
 // $('.tombol-save-profile').on('click',function(){
 //     Swal.fire({
