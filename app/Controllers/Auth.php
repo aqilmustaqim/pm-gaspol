@@ -3,15 +3,18 @@
 namespace App\Controllers;
 
 use App\Models\UsersModel;
+use App\Models\PositionModel;
 
 class Auth extends BaseController
 {
 
     protected $usersModel;
+    protected $positionModel;
 
     public function __construct()
     {
         $this->usersModel = new UsersModel();
+        $this->positionModel = new PositionModel();
     }
 
     public function index()
@@ -49,9 +52,12 @@ class Auth extends BaseController
             'email' => $this->request->getVar('email'),
             'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
             'role_id' => 3,
-            'is_active' => 1
+            'is_active' => 0,
+            'posisi_id' => 0,
+            'foto' => 'default.png'
         ])) {
-            dd('berhasil');
+            session()->setFlashdata('register', 'Akun Berhasil Dibuat, Harap hubungi admin untuk aktivasi ! ');
+            return redirect()->to(base_url());
         }
     }
 
@@ -105,7 +111,7 @@ class Auth extends BaseController
                     }
                 } else {
                     //litertly wicis if user tidak aktif
-                    session()->setFlashdata('login', 'Akun anda dinonaktifkan, harap hubungi admin ! ');
+                    session()->setFlashdata('login', 'Akun anda Belum Aktif, harap hubungi admin ! ');
                     return redirect()->to(base_url());
                 }
             } else {
@@ -142,10 +148,21 @@ class Auth extends BaseController
 
         $user = $this->usersModel->where('email', session()->get('email'))->first();
 
+        $db      = \Config\Database::connect();
+        $builder = $db->table('users');
+        $builder->select('*,position.id as id_position,users.id as id');
+        $builder->join('position', 'users.posisi_id = position.id');
+        $builder->where('email', session()->get('email'));
+        $query = $builder->get();
+        $users = $query->getRowArray();
+
+        $posisi = $this->positionModel->findAll();
+
         $data = [
             'title' => 'PM-GASPOL || Account Settings',
             'bread' => 'Account Setting',
-            'user' => $user,
+            'user' => $users,
+            'posisi' => $posisi,
             'validation' => \Config\Services::validation()
         ];
         return view('auth/settings', $data);
@@ -176,6 +193,7 @@ class Auth extends BaseController
         if ($this->usersModel->save([
             'id' => $user['id'],
             'nama' => $this->request->getVar('nama'),
+            'posisi_id' => $this->request->getVar('posisi'),
             'foto' => $namaFoto
         ])) {
             session()->setFlashdata('profile', 'Update Profile, Silahkan Login Ulang !');

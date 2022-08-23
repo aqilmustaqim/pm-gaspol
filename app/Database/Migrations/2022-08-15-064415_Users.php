@@ -32,6 +32,10 @@ class Users extends Migration
                 'type'           => 'INT',
                 'constraint'     => '11'
             ],
+            'posisi_id' => [
+                'type'           => 'INT',
+                'constraint'     => '11'
+            ],
             'is_active' => [
                 'type'           => 'INT',
                 'constraint'     => '1'

@@ -19,6 +19,12 @@
                         </button>
                     </div>
                 <?php } ?>
+                <?php if (session()->getFlashdata('register')) { ?>
+                    <div class="alert alert-success solid alert-dismissible fade show">
+                        <strong>Success!</strong> <?= session()->getFlashdata('register'); ?> <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
+                        </button>
+                    </div>
+                <?php } ?>
 
                 <form action="<?= base_url(); ?>/auth/loginSave" method="post">
 

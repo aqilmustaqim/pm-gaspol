@@ -52,6 +52,17 @@
                                         <input type="email" placeholder="Enter your email address" name="email" id="email" name="profile-email" class="form-control" value="<?= $user['email']; ?>" readonly required />
                                     </div>
                                 </div>
+                                <div class="form-group row align-items-center">
+                                    <label class="col-3">Position</label>
+                                    <div class="col">
+                                        <select class="form-control" id="exampleFormControlSelect1" name="posisi">
+                                            <option value="<?= $user['id_position']; ?>" selected><?= $user['posisi']; ?></option>
+                                            <?php foreach ($posisi as $p) : ?>
+                                                <option value="<?= $p['id']; ?>"><?= $p['posisi']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
 
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary tombol-save-profile">Save</button>
