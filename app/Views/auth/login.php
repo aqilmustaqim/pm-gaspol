@@ -21,8 +21,8 @@
                 <?php } ?>
                 <?php if (session()->getFlashdata('register')) { ?>
                     <div class="alert alert-success solid alert-dismissible fade show">
-                        <strong>Success!</strong> <?= session()->getFlashdata('register'); ?> <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
-                        </button>
+                        <strong>Success!</strong> <?= session()->getFlashdata('register'); ?> <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span></button>
+                        <a href="https://api.whatsapp.com/send?phone=6282113123450&text=Saya%20sudah%20daftar%20akun%20Gaspol%20App,%20tolong%20segera%20diaktivasi" target="_blank">Hubungi Admin</a>
                     </div>
                 <?php } ?>
 

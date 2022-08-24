@@ -4,21 +4,30 @@ namespace App\Controllers;
 
 use App\Models\UsersModel;
 use App\Models\UserRoleModel;
+use App\Models\PositionModel;
 
 class Member extends BaseController
 {
 
     protected $usersModel;
     protected $userRoleModel;
+    protected $positionModel;
 
     public function __construct()
     {
         $this->usersModel = new UsersModel();
         $this->userRoleModel = new UserRoleModel();
+        $this->positionModel = new PositionModel();
     }
 
     public function index()
     {
+
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url());
+        } else if (session()->get('role_id') != 1) {
+            return redirect()->to(base_url('dashboard'));
+        }
 
         //Ambil Data User Yang Belum Di Aktivasi
         $db      = \Config\Database::connect();
@@ -99,5 +108,25 @@ class Member extends BaseController
             session()->setFlashdata('member', 'Approve Member');
             return redirect()->to(base_url('member'));
         }
+    }
+
+    public function position()
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url());
+        } else if (session()->get('role_id') != 1) {
+            return redirect()->to(base_url('dashboard'));
+        }
+
+        $position = $this->positionModel->findAll();
+
+        $data = [
+            'title' => 'List Member',
+            'validation' => \Config\Services::validation(),
+            'bread' => 'List Member',
+            'position' => $position
+        ];
+
+        return view('member/position', $data);
     }
 }
