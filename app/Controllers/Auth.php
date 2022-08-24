@@ -53,7 +53,7 @@ class Auth extends BaseController
             'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
             'role_id' => 3,
             'is_active' => 0,
-            'posisi_id' => 0,
+            'posisi_id' => 1,
             'foto' => 'default.png'
         ])) {
             session()->setFlashdata('register', 'Akun Berhasil Dibuat, Harap hubungi admin untuk aktivasi ! ');

@@ -43,15 +43,15 @@
                                     } else if ($u['role_id'] == 2) {
                                         echo '<span class="badge badge-pill badge-danger font-size-12"> Leader </span>';
                                     } else if ($u['role_id'] == 3) {
-                                        echo '<span class="badge badge-pill badge-danger font-size-12"> Member </span>';
+                                        echo '<span class="badge badge-pill badge-primary font-size-12"> Member </span>';
                                     }
                                     ?>
                                 </td>
                                 <td><?= date('d-m-y', strtotime($u['created_at'])); ?></td>
                                 <td>
 
-                                    <a href="<?= base_url(); ?>/users/updateMember/<?= $u['id']; ?>" class="badge badge-info" data-toggle="modal" data-target="#UbahDataMember<?= $u['id']; ?>"><i class="fa fas fa-edit"></i></a>
-                                    <a href="<?= base_url(); ?>/users/deleteMember/<?= $u['id']; ?>" class="badge badge-danger tombol-hapus"><i class="fa fas fa-trash"></i></a>
+                                    <a href="<?= base_url(); ?>/member/updateMember/<?= $u['id']; ?>" class="badge badge-info" data-toggle="modal" data-target="#UbahDataMember<?= $u['id']; ?>"><i class="fa fas fa-edit"></i></a>
+                                    <a href="<?= base_url(); ?>/member/deleteMember/<?= $u['id']; ?>" class="badge badge-danger tombol-hapus"><i class="fa fas fa-trash"></i></a>
                                 </td>
                             </tr>
 

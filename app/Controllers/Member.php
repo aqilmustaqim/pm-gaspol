@@ -81,6 +81,14 @@ class Member extends BaseController
         }
     }
 
+    public function deleteMember($id)
+    {
+        if ($this->usersModel->delete($id)) {
+            session()->setFlashdata('member', 'Menghapus Member');
+            return redirect()->to(base_url('member'));
+        }
+    }
+
     public function approveMember($id)
     {
         //Update Database
