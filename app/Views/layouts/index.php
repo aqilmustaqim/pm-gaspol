@@ -79,14 +79,10 @@
                             <ul class="nav nav-small flex-column">
 
                                 <li class="nav-item">
-                                    <a class="nav-link" href="pages-app.html">List Team</a>
+                                    <a class="nav-link" href="<?= base_url(); ?>/team">List Team</a>
                                 </li>
 
-                                <?php if (session()->get('role_id') == 1) : ?>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="pages-utility.html">Add Team</a>
-                                    </li>
-                                <?php endif; ?>
+
 
 
                             </ul>
@@ -185,6 +181,149 @@
     <!-- Font Awesome -->
     <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
 
+    <script>
+        // Fungsi Add Team
+        $('.btn-team').on('click', function() {
+            //Ambil Inputan
+            let namateam = $('#namateam').val();
+            let deskripsiteam = $('#deskripsiteam').val();
+
+            if (namateam == '') {
+                Swal.fire({
+                    title: 'Data Team ',
+                    text: 'Nama Team Tidak Boleh Kosong !',
+                    icon: 'error'
+                })
+            } else if (deskripsiteam == '') {
+                Swal.fire({
+                    title: 'Data Team ',
+                    text: 'Deskripsi Team Tidak Boleh Kosong !',
+                    icon: 'error'
+                })
+            } else {
+
+                //Jalankan Ajax
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url(); ?>/team/addTeam",
+                    data: {
+                        namateam: namateam,
+                        deskripsiteam: deskripsiteam
+                    },
+                    success: function(data) {
+                        if (data == "berhasil") {
+                            Swal.fire({
+                                title: 'Data Team',
+                                text: 'Berhasil Add Team !',
+                                icon: 'success'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "<?= base_url(); ?>/team";
+                                }
+                            })
+                        }
+
+                    }
+                });
+
+            }
+
+        });
+
+        // Fungsi Change Password
+        $('.btn-change-password').on('click', function() {
+            let passwordlama = $('#passwordlama').val();
+            let passwordbaru = $('#passwordbaru').val();
+            let passwordkonfirmasi = $('#passwordkonfirmasi').val();
+
+            if (passwordlama == '') {
+                Swal.fire({
+                    title: 'Change Password ',
+                    text: 'Password Lama Tidak Boleh Kosong !',
+                    icon: 'error'
+                });
+            } else if (passwordbaru.length < 8) {
+                Swal.fire({
+                    title: 'Change Password ',
+                    text: 'Password Minimal 8 Karakter !',
+                    icon: 'error'
+                });
+            } else if (passwordbaru == '') {
+                Swal.fire({
+                    title: 'Change Password ',
+                    text: 'Password Baru Tidak Boleh Kosong !',
+                    icon: 'error'
+                });
+            } else if (passwordkonfirmasi != passwordbaru) {
+                Swal.fire({
+                    title: 'Change Password ',
+                    text: 'Password Konfirmasi Harus Match Dengan Password !',
+                    icon: 'error'
+                });
+            } else {
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url(); ?>/auth/changePassword",
+                    data: {
+                        passwordlama: passwordlama,
+                        passwordbaru: passwordbaru,
+                        passwordkonfirmasi: passwordkonfirmasi
+                    },
+                    success: function(data) {
+                        if (data == "passwordsalah") {
+                            Swal.fire({
+                                title: 'Change Password',
+                                text: 'Password Lama Salah !',
+                                icon: 'error'
+                            })
+                        } else if (data == "berhasil") {
+                            Swal.fire({
+                                title: 'Change Password',
+                                text: 'Berhasil Di Ubah Silahkan Login Ulang !',
+                                icon: 'success'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "<?= base_url(); ?>/auth/logout";
+                                }
+                            })
+                        }
+
+                    }
+                });
+            }
+        });
+
+        //Fungsi Checkbox Member
+        $('.checkbox-member').on('click', function() {
+            const idTeam = $(this).data('team');
+            const idUser = $(this).data('user');
+
+            $.ajax({
+                method: "POST",
+                url: "<?= base_url(); ?>/team/addMemberTeam",
+                data: {
+                    idTeam: idTeam,
+                    idUser: idUser
+                },
+                success: function(data) {
+                    if (data == "berhasil") {
+                        Swal.fire({
+                            title: 'Add Member',
+                            text: 'Berhasil !',
+                            icon: 'success'
+                        })
+                    } else if (data == "hapus") {
+                        Swal.fire({
+                            title: 'Add Member',
+                            text: 'Di Hapus !',
+                            icon: 'error'
+                        })
+                    }
+
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
