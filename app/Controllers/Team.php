@@ -23,13 +23,38 @@ class Team extends BaseController
     public function index()
     {
 
+        //Data Team Untuk Admin
         $datateam = $this->teamModel->findAll();
-        $datausers = $this->usersModel->findAll();
+
+        //Posisi User
+        $db      = \Config\Database::connect();
+        $builder = $db->table('users');
+        $builder->select('*');
+        $builder->join('position', 'users.posisi_id = position.id');
+        $query = $builder->get();
+        $userPosition = $query->getRowArray();
+
+        //Data Team Untuk Masing2 User
+        //1. ID user Dari Session
+        $users = $this->usersModel->where('email', session()->get('email'))->first();
+
+        $db      = \Config\Database::connect();
+        $builder = $db->table('detail_team');
+        $builder->select('team.id as id_team,team,deskripsi_team,nama,foto');
+        $builder->join('team', 'detail_team.id_team = team.id');
+        $builder->join('users', 'detail_team.id_users = users.id');
+        $builder->where('id_users', $users['id']);
+        $query = $builder->get();
+        $dataTeamUser = $query->getResultArray();
+
+        $datausers = $this->usersModel->where('is_active', '1')->findAll();
         $data = [
             'title' => 'PM Gaspol || Team',
             'bread' => 'Team',
             'datateam' => $datateam,
-            'datausers' => $datausers
+            'datausers' => $datausers,
+            'datateamuser' => $dataTeamUser,
+            'userposition' => $userPosition
         ];
 
         return view('team/index', $data);
@@ -76,6 +101,54 @@ class Team extends BaseController
             if ($this->detailTeamModel->delete($detailteam['id'])) {
                 echo 'hapus';
             }
+        }
+    }
+
+    public function leaveTeam($idTeam)
+    {
+        $users = $this->usersModel->where('email', session()->get('email'))->first();
+
+        $db      = \Config\Database::connect();
+        $builder = $db->table('detail_team');
+        $builder->select('*');
+        $builder->where('id_team', $idTeam);
+        $builder->where('id_users', $users['id']);
+        $query = $builder->get();
+        $leavemember = $query->getRowArray();
+
+        //Cek Apakah Ada Member Yang Mau Leave
+        if ($leavemember) {
+            if ($this->detailTeamModel->delete($leavemember['id'])) {
+                session()->setFlashdata('team', 'Leave Team');
+                return redirect()->to(base_url('team'));
+            }
+        }
+    }
+
+    public function deleteTeam($idTeam)
+    {
+
+
+        //Hapus Team Dari Database
+        if ($this->teamModel->delete($idTeam)) {
+            //Kalau Berhasil Maka Cek Lagi Apakah Team yang dihapus ada membernya
+            $db      = \Config\Database::connect();
+            $builder = $db->table('detail_team');
+            $builder->select('*');
+            $builder->where('id_team', $idTeam);
+            $query = $builder->get();
+            $memberteam = $query->getResultArray();
+
+            //Cek apakah ada membernya 
+            if ($memberteam) {
+                //Kalau Ada Hapus Semua 
+                //Lakukan Pake Foreach
+                foreach ($memberteam as $mt) {
+                    $this->detailTeamModel->delete($mt['id']);
+                }
+            }
+            session()->setFlashdata('team', 'Menghapus Team Dan Member');
+            return redirect()->to(base_url('team'));
         }
     }
 }

@@ -25,6 +25,27 @@ $('.tombol-approve').on('click',function(e){
     })
 });
 
+$('.tombol-leave-team').on('click',function(e){
+  //Matikan fungsi A href nya
+  e.preventDefault();
+  //Ambil Isi Hrefnya
+  const href = $(this).attr('href');
+  Swal.fire({
+      title: 'Apakah Anda Yakin?',
+      text: "Ingin Keluar Dari Team !",
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Gaspol Om !'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        //Tampilkan Href
+        document.location.href = href;
+      }
+    })
+});
+
 //Tombol-hapus
 $('.tombol-hapus').on('click',function(e){
     //Matikan fungsi A href nya
@@ -47,7 +68,7 @@ $('.tombol-hapus').on('click',function(e){
       })
 });
 
-//Flash Data
+//Flash Data Profile
 const swal = $('.profile').data('profile'); //Ambil Data FlashDatanya
 if ( swal ){
     //Kalau Ada isinya jalankan sweetalert
@@ -62,7 +83,7 @@ if ( swal ){
       })
 }
 
-//Flash Data
+//Flash Data Member
 const swal1 = $('.member').data('member'); //Ambil Data FlashDatanya
 if ( swal1 ){
     //Kalau Ada isinya jalankan sweetalert
@@ -73,6 +94,16 @@ if ( swal1 ){
     })
 }
 
+//Flash Data Team
+const swal2 = $('.team').data('team'); //Ambil Data FlashDatanya
+if ( swal2 ){
+    //Kalau Ada isinya jalankan sweetalert
+    Swal.fire({
+        title: 'Data Team ',
+        text: 'Berhasil ' + swal2,
+        icon: 'success'
+    })
+}
 
 
 
