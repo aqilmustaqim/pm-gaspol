@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 28, 2022 at 09:20 AM
+-- Generation Time: Aug 30, 2022 at 10:11 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.28
 
@@ -41,12 +41,10 @@ CREATE TABLE `detail_team` (
 INSERT INTO `detail_team` (`id`, `id_team`, `id_project`, `id_users`) VALUES
 (14, 1, NULL, 11),
 (19, 1, NULL, 9),
-(20, 1, NULL, 13),
-(21, 1, NULL, 14),
-(26, 2, NULL, 8),
-(27, 1, NULL, 15),
 (28, 2, NULL, 14),
-(30, 3, NULL, 9);
+(35, 1, NULL, 13),
+(36, 1, NULL, 14),
+(37, 2, NULL, 9);
 
 -- --------------------------------------------------------
 
@@ -114,8 +112,7 @@ INSERT INTO `team` (`id`, `team`, `deskripsi_team`) VALUES
 (1, 'DewaBiz', 'Dewabiz Gaspol'),
 (2, 'Pasukan Langit', 'Testes'),
 (3, 'sembarang wes', 'sembarang om'),
-(4, 'Pasukan Telkom Surabaya', 'Anak Magang'),
-(7, 'asdasd', 'asdas');
+(4, 'Pasukan Telkom Surabaya', 'Anak Magang');
 
 -- --------------------------------------------------------
 
@@ -142,7 +139,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `nama`, `email`, `password`, `foto`, `role_id`, `posisi_id`, `is_active`, `created_at`, `updated_at`) VALUES
 (8, 'Admin', 'admin@gmail.com', '$2y$10$3dSKgOtt0xcnaOEHbxX0KODUKdTba6AOzBKRuKjQdyLkwi/IYxm6.', '1661049086_e48baacabdb6436d3616.jpg', 1, 1, 1, '2022-08-15 17:02:30', '2022-08-27 15:13:46'),
-(9, 'Aqil', 'aqilmustaqim28@gmail.com', '$2y$10$CcRznk.tEg9IGcsCwDVPUOCWBGP7yh0aWu.QWYmpV2zH42ihmz.6G', 'default.png', 2, 2, 1, '2022-08-16 11:34:46', '2022-08-24 13:28:48'),
+(9, 'Aqil', 'aqilmustaqim28@gmail.com', '$2y$10$CcRznk.tEg9IGcsCwDVPUOCWBGP7yh0aWu.QWYmpV2zH42ihmz.6G', '1661839947_392d1e09f434fff697ae.jpg', 2, 2, 1, '2022-08-16 11:34:46', '2022-08-30 13:12:27'),
 (11, 'Nafi', 'sayanafi@gmail.com', '$2y$10$3QBO0ozidYde9E7ufgl/J.2rlNBn7Hm8LPgMWJlDfBbq.BWSF7ne6', 'default.png', 3, 2, 1, '2022-08-23 14:05:36', '2022-08-23 15:07:44'),
 (13, 'Sapril', 'sayasyahfril@gmail.com', '$2y$10$OGHlycxaTLdm6tL74RGl2eL7PnnR0XkY6TM0NaOP7hp5PWlUXOEc2', 'default.png', 3, 1, 1, '2022-08-23 15:12:05', '2022-08-25 14:10:59'),
 (14, 'Udennn', 'uden@gmail.com', '$2y$10$wDQOT9W.5ezCGwZ.AE16UO1RLg2tDrCHvcMerAKP/QkPTchqIR0FO', 'default.png', 3, 1, 1, '2022-08-24 11:02:28', '2022-08-25 14:11:23'),
@@ -220,7 +217,7 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT for table `detail_team`
 --
 ALTER TABLE `detail_team`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `migrations`
