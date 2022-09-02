@@ -175,12 +175,26 @@ class Team extends BaseController
         //Menampilkan Semua Data Project Yang ID TEAM NYA SAMA 
         $project = $this->projectModel->where('id_team', $idTeam)->findAll();
 
+        //Menampilkan Semua Data Project Sesuai Dengan User Yg Login
+        $users = $this->usersModel->where('email', session()->get('email'))->first();
+
+        $db      = \Config\Database::connect();
+        $builder = $db->table('detail_project');
+        $builder->select('project.id as id_project,nama_project');
+        $builder->join('project', 'detail_project.id_project = project.id');
+        $builder->join('users', 'detail_project.id_users = users.id');
+        $builder->where('id_team', $idTeam);
+        $builder->where('id_users', $users['id']);
+        $query = $builder->get();
+        $projectUsers = $query->getResultArray();
+
         //Query Untuk Mengambil Foto Member Team
         $db      = \Config\Database::connect();
         $builder = $db->table('detail_team');
-        $builder->select('nama,foto');
+        $builder->select('nama,foto,role');
         $builder->join('team', 'detail_team.id_team = team.id');
         $builder->join('users', 'detail_team.id_users = users.id');
+        $builder->join('user_role', 'users.role_id = user_role.id');
         $builder->where('id_team', $idTeam);
         $query = $builder->get();
         $fotoMemberTeam = $query->getResultArray();
@@ -192,7 +206,8 @@ class Team extends BaseController
             'fotoMemberTeam' => $fotoMemberTeam,
             'idTeam' => $idTeam,
             'project' => $project,
-            'datausers' => $datausers
+            'datausers' => $datausers,
+            'projectUsers' => $projectUsers
         ];
 
         return view('team/detailTeam', $data);
