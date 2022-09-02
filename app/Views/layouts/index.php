@@ -293,7 +293,7 @@
             }
         });
 
-        //Fungsi Checkbox Member
+        //Fungsi Checkbox Member Team
         $('.checkbox-member').on('click', function() {
             const idTeam = $(this).data('team');
             const idUser = $(this).data('user');
@@ -322,6 +322,104 @@
 
                 }
             });
+        });
+
+        //Fungsi Checkbox Member Project
+        $('.checkbox-member-project').on('click', function() {
+            const idProject = $(this).data('project');
+            const idUser = $(this).data('user');
+
+            $.ajax({
+                method: "POST",
+                url: "<?= base_url(); ?>/project/addMemberProject",
+                data: {
+                    idProject: idProject,
+                    idUser: idUser
+                },
+                success: function(data) {
+                    if (data == "berhasil") {
+                        Swal.fire({
+                            title: 'Add Member Project',
+                            text: 'Berhasil !',
+                            icon: 'success'
+                        })
+                    } else if (data == "hapus") {
+                        Swal.fire({
+                            title: 'Add Member Project',
+                            text: 'Di Hapus !',
+                            icon: 'error'
+                        })
+                    }
+
+                }
+            });
+        });
+
+        //Fungsi Add Project
+        $('.tombol-add-project').on('click', function() {
+            //Tangkap Semua Inputan
+            let namaProject = $('#namaProject').val();
+            let deskripsiProject = $('#deskripsiProject').val();
+            let tanggalMulai = $('#tanggalMulai').val();
+            let batasWaktu = $('#batasWaktu').val();
+            let idTeam = $('#idTeam').val();
+
+            //Cek Biar Jangan Kosong
+            if (namaProject == '') {
+                Swal.fire({
+                    title: 'Project',
+                    text: 'Nama Project Tidak Boleh Kosong !',
+                    icon: 'error'
+                });
+            } else if (deskripsiProject == '') {
+                Swal.fire({
+                    title: 'Project',
+                    text: 'Deskripsi Project Tidak Boleh Kosong !',
+                    icon: 'error'
+                });
+            } else if (tanggalMulai == '') {
+                Swal.fire({
+                    title: 'Project ',
+                    text: 'Tanggal Project Tidak Boleh Kosong !',
+                    icon: 'error'
+                });
+            } else if (batasWaktu == '') {
+                Swal.fire({
+                    title: 'Project ',
+                    text: 'Batas Project Tidak Boleh Kosong !',
+                    icon: 'error'
+                });
+            } else {
+
+                //Kalau Ada Isinya Semua Tampilin Ajax
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url(); ?>/project/addProject",
+                    data: {
+                        namaProject: namaProject,
+                        deskripsiProject: deskripsiProject,
+                        tanggalMulai: tanggalMulai,
+                        batasWaktu: batasWaktu,
+                        idTeam: idTeam
+                    },
+                    success: function(data) {
+                        if (data == "berhasil") {
+                            Swal.fire({
+                                title: 'Add Project',
+                                text: 'Berhasil Di Add !',
+                                icon: 'success'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "<?= base_url(); ?>/team/detailTeam/" + idTeam;
+                                }
+                            })
+                        }
+
+                    }
+                });
+
+
+            }
         });
     </script>
 </body>

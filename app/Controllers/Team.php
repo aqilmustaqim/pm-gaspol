@@ -5,6 +5,9 @@ namespace App\Controllers;
 use App\Models\TeamModel;
 use App\Models\UsersModel;
 use App\Models\DetailTeamModel;
+use App\Models\ProjectModel;
+
+use function PHPSTORM_META\map;
 
 class Team extends BaseController
 {
@@ -12,16 +15,22 @@ class Team extends BaseController
     protected $teamModel;
     protected $usersModel;
     protected $detailTeamModel;
+    protected $projectModel;
 
     public function __construct()
     {
         $this->teamModel = new TeamModel();
         $this->usersModel = new UsersModel();
         $this->detailTeamModel = new DetailTeamModel();
+        $this->projectModel = new ProjectModel();
     }
 
     public function index()
     {
+
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url());
+        }
 
         //Data Team Untuk Admin
         $datateam = $this->teamModel->findAll();
@@ -127,8 +136,6 @@ class Team extends BaseController
 
     public function deleteTeam($idTeam)
     {
-
-
         //Hapus Team Dari Database
         if ($this->teamModel->delete($idTeam)) {
             //Kalau Berhasil Maka Cek Lagi Apakah Team yang dihapus ada membernya
@@ -150,5 +157,44 @@ class Team extends BaseController
             session()->setFlashdata('team', 'Menghapus Team Dan Member');
             return redirect()->to(base_url('team'));
         }
+    }
+
+    public function detailTeam($idTeam)
+    {
+
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url());
+        }
+
+        //Menampilkan Semua Users Yang Status Nya Aktif
+        $datausers = $this->usersModel->where('is_active', '1')->findAll();
+
+        //Menampilkan Semua Data DetailTeam yang ID Team Nya Sama Dengan ID
+        $detailteam = $this->teamModel->where('id', $idTeam)->first();
+
+        //Menampilkan Semua Data Project Yang ID TEAM NYA SAMA 
+        $project = $this->projectModel->where('id_team', $idTeam)->findAll();
+
+        //Query Untuk Mengambil Foto Member Team
+        $db      = \Config\Database::connect();
+        $builder = $db->table('detail_team');
+        $builder->select('nama,foto');
+        $builder->join('team', 'detail_team.id_team = team.id');
+        $builder->join('users', 'detail_team.id_users = users.id');
+        $builder->where('id_team', $idTeam);
+        $query = $builder->get();
+        $fotoMemberTeam = $query->getResultArray();
+
+        $data = [
+            'title' => 'PM Gaspol || Detail Team',
+            'bread' => 'Detail Team',
+            'detailTeam' => $detailteam,
+            'fotoMemberTeam' => $fotoMemberTeam,
+            'idTeam' => $idTeam,
+            'project' => $project,
+            'datausers' => $datausers
+        ];
+
+        return view('team/detailTeam', $data);
     }
 }

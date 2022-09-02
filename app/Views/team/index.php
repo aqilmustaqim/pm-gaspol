@@ -52,7 +52,7 @@
                                             </div>
 
                                             <div class="card-title">
-                                                <a href="#">
+                                                <a href="<?= base_url(); ?>/team/detailTeam/<?= $dtu['id_team']; ?>">
                                                     <h5 data-filter-by="text"><?= $dtu['team']; ?></h5>
                                                 </a>
                                                 <span>4 Projects, <?= jumlahMemberTeam($dtu['id_team'])['id']; ?> Members</span>
@@ -122,7 +122,7 @@
                                             </div>
 
                                             <div class="card-title">
-                                                <a href="#">
+                                                <a href="<?= base_url(); ?>/team/detailTeam/<?= $dt['id']; ?>">
                                                     <h5 data-filter-by="text"><?= $dt['team']; ?></h5>
                                                 </a>
                                                 <span>4 Projects, <?= jumlahMemberTeam($dt['id'])['id']; ?> Members</span>

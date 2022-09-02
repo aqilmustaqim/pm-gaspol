@@ -15,6 +15,22 @@ function check_member($idteam, $iduser)
     }
 }
 
+function check_member_project($idProject, $iduser)
+{
+    $db      = \Config\Database::connect();
+    $builder = $db->table('detail_project');
+    $builder->select('*');
+    $builder->where('id_project', $idProject);
+    $builder->where('id_users', $iduser);
+    $query = $builder->get();
+    $access1 = $query->getResultArray();
+
+
+    if ($access1) {
+        return "checked='checked'";
+    }
+}
+
 function detailFotoTeam($idTeam)
 {
     $db      = \Config\Database::connect();
@@ -28,6 +44,21 @@ function detailFotoTeam($idTeam)
 
     return $detailteam;
 }
+
+function detailFotoProject($idProject)
+{
+    $db      = \Config\Database::connect();
+    $builder = $db->table('detail_project');
+    $builder->select('nama,foto');
+    $builder->join('project', 'detail_project.id_project = project.id');
+    $builder->join('users', 'detail_project.id_users = users.id');
+    $builder->where('id_project', $idProject);
+    $query = $builder->get();
+    $detailProject = $query->getResultArray();
+
+    return $detailProject;
+}
+
 function jumlahMemberTeam($idTeam)
 {
     $db      = \Config\Database::connect();
