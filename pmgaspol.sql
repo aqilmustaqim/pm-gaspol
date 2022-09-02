@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 30, 2022 at 10:11 AM
+-- Generation Time: Sep 02, 2022 at 02:36 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.28
 
@@ -20,6 +20,26 @@ SET time_zone = "+00:00";
 --
 -- Database: `pmgaspol`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `detail_project`
+--
+
+CREATE TABLE `detail_project` (
+  `id` int(11) NOT NULL,
+  `id_project` int(11) NOT NULL,
+  `id_users` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `detail_project`
+--
+
+INSERT INTO `detail_project` (`id`, `id_project`, `id_users`) VALUES
+(3, 1, 11),
+(9, 1, 9);
 
 -- --------------------------------------------------------
 
@@ -71,7 +91,9 @@ INSERT INTO `migrations` (`id`, `version`, `class`, `group`, `namespace`, `time`
 (2, '2022-08-15-064426', 'App\\Database\\Migrations\\UserRole', 'default', 'App', 1660545996, 1),
 (3, '2022-08-22-092822', 'App\\Database\\Migrations\\Position', 'default', 'App', 1661160572, 2),
 (4, '2022-08-25-023821', 'App\\Database\\Migrations\\Team', 'default', 'App', 1661395203, 3),
-(5, '2022-08-26-030703', 'App\\Database\\Migrations\\DetailTeam', 'default', 'App', 1661483432, 4);
+(5, '2022-08-26-030703', 'App\\Database\\Migrations\\DetailTeam', 'default', 'App', 1661483432, 4),
+(6, '2022-08-31-073127', 'App\\Database\\Migrations\\Project', 'default', 'App', 1661931332, 5),
+(7, '2022-09-01-074631', 'App\\Database\\Migrations\\DetailProject', 'default', 'App', 1662018644, 6);
 
 -- --------------------------------------------------------
 
@@ -91,6 +113,31 @@ CREATE TABLE `position` (
 INSERT INTO `position` (`id`, `posisi`) VALUES
 (1, 'Web Developer'),
 (2, 'Designer');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `project`
+--
+
+CREATE TABLE `project` (
+  `id` int(11) NOT NULL,
+  `id_team` int(11) NOT NULL,
+  `nama_project` varchar(225) NOT NULL,
+  `deskripsi_project` text NOT NULL,
+  `tanggal_mulai` date NOT NULL,
+  `batas_waktu` date NOT NULL,
+  `status_project` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `project`
+--
+
+INSERT INTO `project` (`id`, `id_team`, `nama_project`, `deskripsi_project`, `tanggal_mulai`, `batas_waktu`, `status_project`) VALUES
+(1, 1, 'Gaspol Project', 'Versi Mobile Dan Website', '2022-09-01', '2022-09-30', 1),
+(2, 2, 'APP Sekolah', 'Website Sekolah Dengan Wordpress', '2022-09-01', '2022-09-17', 1),
+(3, 1, 'Asd', 'asdasd', '2022-09-02', '2022-09-02', 1);
 
 -- --------------------------------------------------------
 
@@ -173,6 +220,12 @@ INSERT INTO `user_role` (`id`, `role`) VALUES
 --
 
 --
+-- Indexes for table `detail_project`
+--
+ALTER TABLE `detail_project`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `detail_team`
 --
 ALTER TABLE `detail_team`
@@ -188,6 +241,12 @@ ALTER TABLE `migrations`
 -- Indexes for table `position`
 --
 ALTER TABLE `position`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `project`
+--
+ALTER TABLE `project`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -214,6 +273,12 @@ ALTER TABLE `user_role`
 --
 
 --
+-- AUTO_INCREMENT for table `detail_project`
+--
+ALTER TABLE `detail_project`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT for table `detail_team`
 --
 ALTER TABLE `detail_team`
@@ -223,13 +288,19 @@ ALTER TABLE `detail_team`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `position`
 --
 ALTER TABLE `position`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `project`
+--
+ALTER TABLE `project`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `team`
