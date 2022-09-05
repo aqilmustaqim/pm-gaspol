@@ -167,7 +167,15 @@ class Team extends BaseController
         }
 
         //Menampilkan Semua Users Yang Status Nya Aktif
-        $datausers = $this->usersModel->where('is_active', '1')->findAll();
+        $db      = \Config\Database::connect();
+        $builder = $db->table('detail_team');
+        $builder->select('detail_team.id as id_detail_team,users.id as id,nama,foto');
+        $builder->join('users', 'detail_team.id_users = users.id');
+        $builder->where('id_team', $idTeam);
+        $builder->where('is_active', '1');
+        $query = $builder->get();
+        $datausers = $query->getResultArray();
+        //$datausers = $this->usersModel->where('is_active', '1')->findAll();
 
         //Menampilkan Semua Data DetailTeam yang ID Team Nya Sama Dengan ID
         $detailteam = $this->teamModel->where('id', $idTeam)->first();

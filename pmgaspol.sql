@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 02, 2022 at 02:36 PM
+-- Generation Time: Sep 05, 2022 at 09:08 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.28
 
@@ -39,7 +39,9 @@ CREATE TABLE `detail_project` (
 
 INSERT INTO `detail_project` (`id`, `id_project`, `id_users`) VALUES
 (3, 1, 11),
-(9, 1, 9);
+(9, 1, 9),
+(11, 2, 9),
+(13, 2, 14);
 
 -- --------------------------------------------------------
 
@@ -64,7 +66,8 @@ INSERT INTO `detail_team` (`id`, `id_team`, `id_project`, `id_users`) VALUES
 (28, 2, NULL, 14),
 (35, 1, NULL, 13),
 (36, 1, NULL, 14),
-(37, 2, NULL, 9);
+(37, 2, NULL, 9),
+(39, 2, NULL, 13);
 
 -- --------------------------------------------------------
 
@@ -136,8 +139,7 @@ CREATE TABLE `project` (
 
 INSERT INTO `project` (`id`, `id_team`, `nama_project`, `deskripsi_project`, `tanggal_mulai`, `batas_waktu`, `status_project`) VALUES
 (1, 1, 'Gaspol Project', 'Versi Mobile Dan Website', '2022-09-01', '2022-09-30', 1),
-(2, 2, 'APP Sekolah', 'Website Sekolah Dengan Wordpress', '2022-09-01', '2022-09-17', 1),
-(3, 1, 'Asd', 'asdasd', '2022-09-02', '2022-09-02', 1);
+(2, 2, 'APP Sekolah', 'Website Sekolah Dengan Wordpress', '2022-09-01', '2022-09-17', 1);
 
 -- --------------------------------------------------------
 
@@ -192,8 +194,7 @@ INSERT INTO `users` (`id`, `nama`, `email`, `password`, `foto`, `role_id`, `posi
 (14, 'Udennn', 'uden@gmail.com', '$2y$10$wDQOT9W.5ezCGwZ.AE16UO1RLg2tDrCHvcMerAKP/QkPTchqIR0FO', 'default.png', 3, 1, 1, '2022-08-24 11:02:28', '2022-08-25 14:11:23'),
 (15, 'Angga', 'sayaangga@gmail.com', '$2y$10$DcYMEc1BrWpmiGoINO4SsejOOYFd5/eSVRxxWlUxjLLxKL/HUru5i', 'default.png', 3, 1, 0, '2022-08-24 11:05:41', '2022-08-24 11:05:41'),
 (17, 'asd', 'ads@gmail.com', '$2y$10$.ch4pTyd5YQiY/FIKYGIeOOCaho8IO6ZJMFwh.84Vt2kWik30xJGW', 'default.png', 3, 1, 0, '2022-08-24 11:52:22', '2022-08-24 11:52:22'),
-(18, 'asdas', 'asd@gmail.com', '$2y$10$czEogViQXT5Uwkx8dHoqxubgSu09BtgHRl2C5lxioBljqXzwoH.JW', 'default.png', 3, 1, 0, '2022-08-24 11:53:06', '2022-08-24 11:53:06'),
-(19, 'dwdw', 'wrwr@ffs.com', '$2y$10$W0CdQJq31sPJHoineyx2cOTPNSFUAzHOtn1jNFgzeIp/qN9prwFG2', 'default.png', 3, 1, 0, '2022-08-24 11:54:45', '2022-08-24 11:54:45');
+(18, 'asdas', 'asd@gmail.com', '$2y$10$czEogViQXT5Uwkx8dHoqxubgSu09BtgHRl2C5lxioBljqXzwoH.JW', 'default.png', 3, 1, 0, '2022-08-24 11:53:06', '2022-08-24 11:53:06');
 
 -- --------------------------------------------------------
 
@@ -276,13 +277,13 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT for table `detail_project`
 --
 ALTER TABLE `detail_project`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `detail_team`
 --
 ALTER TABLE `detail_team`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -300,7 +301,7 @@ ALTER TABLE `position`
 -- AUTO_INCREMENT for table `project`
 --
 ALTER TABLE `project`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `team`

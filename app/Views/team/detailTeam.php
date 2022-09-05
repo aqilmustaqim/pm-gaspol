@@ -2,6 +2,7 @@
 <?= $this->section('content'); ?>
 
 <div class="container">
+    <div class="team" data-team="<?= session()->getFlashdata('team'); ?>"></div>
     <div class="row justify-content-center">
         <div class="col-lg-11 col-xl-10">
             <div class="page-header">
@@ -22,9 +23,7 @@
 
 
                     </ul>
-                    <button class="btn btn-round flex-shrink-0" data-toggle="modal" data-target="#user-invite-modal">
-                        <i class="material-icons">add</i>
-                    </button>
+
                 </div>
             </div>
             <hr>
@@ -75,10 +74,14 @@
                                                     <button class="btn-options" type="button" id="project-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <i class="material-icons">more_vert</i>
                                                     </button>
+
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#">Edit</a>
+
                                                         <button class="dropdown-item" data-toggle="modal" data-target="#member-add-project<?= $p['id']; ?>">Add Member</button>
+                                                        <button class="dropdown-item text-info" data-toggle="modal" data-target="#project-edit-modal<?= $p['id']; ?>">Edit Project</button>
+                                                        <a class="dropdown-item text-danger tombol-hapus" href="<?= base_url(); ?>/project/deleteProject/<?= $p['id']; ?>">Delete Project</a>
                                                     </div>
+
                                                 </div>
                                                 <div class="card-title">
                                                     <a href="#">
@@ -251,6 +254,63 @@
                     </div>
                 </div>
             </div>
+            <?php foreach ($project as $p) : ?>
+                <div class="modal fade" id="project-edit-modal<?= $p['id']; ?>" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Project <button class="badge badge-dark"><?= $p['nama_project']; ?></button></h5>
+                                <button type="button" class="close btn btn-round" data-dismiss="modal" aria-label="Close">
+                                    <i class="material-icons">close</i>
+                                </button>
+                            </div>
+                            <!--end of modal head-->
+                            <ul class="nav nav-tabs nav-fill" role="tablist">
+
+                            </ul>
+                            <div class="modal-body">
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="project-add-details" role="tabpanel">
+                                        <h6>General Details</h6>
+                                        <div class="form-group row align-items-center">
+                                            <label class="col-3">Name</label>
+                                            <input class="form-control col" type="text" placeholder="Project name" id="editNamaProject" name="namaProject" value="<?= $p['nama_project']; ?>" />
+                                            <input type="hidden" id="idTeam" value="<?= $idTeam; ?>">
+                                            <input type="hidden" id="id" value="<?= $p['id']; ?>">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-3">Description</label>
+                                            <textarea class="form-control col" rows="3" placeholder="Project description" id="editDeskripsiProject" name="deskripsiProject"><?= $p['deskripsi_project']; ?></textarea>
+                                        </div>
+                                        <hr>
+                                        <h6>Timeline</h6>
+                                        <div class="form-group row align-items-center">
+                                            <label class="col-3">Start Date</label>
+                                            <input class="form-control col" type="text" name="project-start" id="editTanggalMulai" placeholder="Select a date" data-flatpickr data-default-date="<?= $p['tanggal_mulai'] ?>" data-alt-input="true" />
+                                        </div>
+                                        <div class="form-group row align-items-center">
+                                            <label class="col-3">Due Date</label>
+                                            <input class="form-control col" type="text" name="project-due" id="editBatasWaktu" placeholder="Select a date" data-flatpickr data-default-date="<?= $p['batas_waktu'] ?>" data-alt-input="true" />
+                                        </div>
+                                        <div class="alert alert-warning text-small" role="alert">
+                                            <span>You can change due dates at any time.</span>
+                                        </div>
+                                        <hr>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!--end of modal body-->
+                            <div class="modal-footer">
+                                <button role="button" class="btn btn-primary tombol-edit-project" type="submit">
+                                    Edit Project
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
 
         </div>
     </div>
@@ -315,7 +375,7 @@
                 </div>
                 <!--end of modal body-->
                 <div class="modal-footer">
-                    <a href="<?= base_url('detailTeam'); ?>/<?= $p['id']; ?>" role="button" class="btn btn-primary">
+                    <a href="<?= base_url('team/detailTeam'); ?>/<?= $p['id']; ?>" role="button" class="btn btn-primary">
                         Done
                     </a>
                 </div>

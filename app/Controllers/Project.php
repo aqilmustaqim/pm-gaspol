@@ -44,6 +44,22 @@ class Project extends BaseController
             echo 'berhasil';
         }
     }
+    public function editProject()
+    {
+        //Masukkan Ke Database
+        if ($this->projectModel->save([
+            'id' => $this->request->getPost('id'),
+            'id_team' => $this->request->getPost('idTeam'),
+            'nama_project' => $this->request->getPost('namaProject'),
+            'deskripsi_project' => $this->request->getPost('deskripsiProject'),
+            'tanggal_mulai' => $this->request->getPost('tanggalMulai'),
+            'batas_waktu' => $this->request->getPost('batasWaktu'),
+            'status_project' => 1
+        ])) {
+            //Kalau Berhasil
+            echo 'berhasil';
+        }
+    }
 
     public function addMemberProject()
     {
@@ -76,6 +92,26 @@ class Project extends BaseController
             if ($this->detailProjectModel->delete($detailproject['id'])) {
                 echo 'hapus';
             }
+        }
+    }
+
+    public function deleteProject($id)
+    {
+        $project = $this->projectModel->where('id', $id)->first();
+        //Hapus Project
+        if ($this->projectModel->delete($id)) {
+            //Kalau Berhasil Hapus
+            //Hapus Juga Yang Ada Di Detail Project Yang Id Projectnya sama
+            $detailproject = $this->detailProjectModel->where('id_project', $id)->findAll();
+            if ($detailproject) {
+                foreach ($detailproject as $dp) {
+                    $this->detailProjectModel->delete($detailproject['id']);
+                }
+            }
+
+            //FlashDatanya
+            session()->setFlashdata('team', 'Menghapus Data Project');
+            return redirect()->to(base_url('team/detailTeam/' . $project['id_team']));
         }
     }
 }

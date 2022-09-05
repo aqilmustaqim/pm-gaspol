@@ -37,7 +37,9 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Auth::index');
-$routes->resource('usersapi');
+//$routes->resource('usersapi');
+$routes->get('usersapi', 'UsersApi::index');
+$routes->get('usersapi/(:segment)', 'UsersApi::show/$1');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

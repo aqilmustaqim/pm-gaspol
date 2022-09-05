@@ -20,8 +20,8 @@
     <div class="layout layout-nav-side">
         <div class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top">
 
-            <a class="navbar-brand" href="index.html">
-                <img alt="Pipeline" src="<?= base_url(); ?>/assets/img/logo.svg" />
+            <a class="navbar-brand" href="<?= base_url(); ?>">
+                <img alt="Pipeline" style="width: 200px;" src="<?= base_url(); ?>/assets/img/logo/logogaspol.png" />
             </a>
             <div class="d-flex align-items-center">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -407,6 +407,75 @@
                             Swal.fire({
                                 title: 'Add Project',
                                 text: 'Berhasil Di Add !',
+                                icon: 'success'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "<?= base_url(); ?>/team/detailTeam/" + idTeam;
+                                }
+                            })
+                        }
+
+                    }
+                });
+
+
+            }
+        });
+
+        //Fungsi Edit Project
+        $('.tombol-edit-project').on('click', function() {
+            //Tangkap Semua Inputan
+            let id = $('#id').val();
+            let namaProject = $('#editNamaProject').val();
+            let deskripsiProject = $('#editDeskripsiProject').val();
+            let tanggalMulai = $('#editTanggalMulai').val();
+            let batasWaktu = $('#editBatasWaktu').val();
+            let idTeam = $('#idTeam').val();
+
+            //Cek Biar Jangan Kosong
+            if (namaProject == '') {
+                Swal.fire({
+                    title: 'Project',
+                    text: 'Nama Project Tidak Boleh Kosong !',
+                    icon: 'error'
+                });
+            } else if (deskripsiProject == '') {
+                Swal.fire({
+                    title: 'Project',
+                    text: 'Deskripsi Project Tidak Boleh Kosong !',
+                    icon: 'error'
+                });
+            } else if (tanggalMulai == '') {
+                Swal.fire({
+                    title: 'Project ',
+                    text: 'Tanggal Project Tidak Boleh Kosong !',
+                    icon: 'error'
+                });
+            } else if (batasWaktu == '') {
+                Swal.fire({
+                    title: 'Project ',
+                    text: 'Batas Project Tidak Boleh Kosong !',
+                    icon: 'error'
+                });
+            } else {
+
+                //Kalau Ada Isinya Semua Tampilin Ajax
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url(); ?>/project/editProject",
+                    data: {
+                        namaProject: namaProject,
+                        deskripsiProject: deskripsiProject,
+                        tanggalMulai: tanggalMulai,
+                        batasWaktu: batasWaktu,
+                        idTeam: idTeam,
+                        id: id
+                    },
+                    success: function(data) {
+                        if (data == "berhasil") {
+                            Swal.fire({
+                                title: 'Edit Project',
+                                text: 'Berhasil Di Edit !',
                                 icon: 'success'
                             }).then((result) => {
                                 if (result.isConfirmed) {
