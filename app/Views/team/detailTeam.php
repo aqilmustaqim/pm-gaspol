@@ -375,7 +375,7 @@
                 </div>
                 <!--end of modal body-->
                 <div class="modal-footer">
-                    <a href="<?= base_url('team/detailTeam'); ?>/<?= $p['id']; ?>" role="button" class="btn btn-primary">
+                    <a href="<?= base_url('team/detailTeam'); ?>/<?= $p['id_team    ']; ?>" role="button" class="btn btn-primary">
                         Done
                     </a>
                 </div>

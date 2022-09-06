@@ -31,4 +31,31 @@ class UsersApi extends ResourceController
             return $this->failNotFound('Tidak ditemukan data user');
         }
     }
+
+    public function create()
+    {
+        $model = new UsersModel();
+        $data = [
+            'nama' => $this->request->getVar('nama'),
+            'email' => $this->request->getVar('email'),
+            'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
+            'foto' => $this->request->getVar('foto'),
+            'role_id' => $this->request->getVar('role_id'),
+            'posisi_id' => $this->request->getVar('posisi_id'),
+            'is_active' => $this->request->getVar('is_active'),
+            'role_id' => $this->request->getVar('role_id'),
+            'created_at' => $this->request->getVar('created_at'),
+            'updated_at' => $this->request->getVar('updated_at')
+        ];
+        $model->insert($data);
+        $response = [
+            'status' => '201',
+            'error' => null,
+            'message' => [
+                'success' => 'Data Users Berhasil DiTambahkan'
+            ]
+
+        ];
+        return $this->respondCreated($response);
+    }
 }
