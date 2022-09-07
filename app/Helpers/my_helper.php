@@ -70,3 +70,15 @@ function jumlahMemberTeam($idTeam)
 
     return $jumlahMemberTeam;
 }
+
+function totalProjectTeam($idTeam)
+{
+    $db      = \Config\Database::connect();
+    $builder = $db->table('project');
+    $builder->selectCount('project.id');
+    $builder->where('id_team', $idTeam);
+    $query = $builder->get();
+    $totalProjectTeam = $query->getRowArray();
+
+    return $totalProjectTeam;
+}

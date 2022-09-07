@@ -97,6 +97,16 @@ class Project extends BaseController
 
     public function deleteProject($id)
     {
+
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url());
+        } else {
+            //Kalau Ada Session
+            //Cek yang login Admin gak , Kalau Bukan Tendang
+            if (session()->get('role_id') != 1) {
+                return redirect()->to(base_url());
+            }
+        }
         $project = $this->projectModel->where('id', $id)->first();
         //Hapus Project
         if ($this->projectModel->delete($id)) {
@@ -113,5 +123,9 @@ class Project extends BaseController
             session()->setFlashdata('team', 'Menghapus Data Project');
             return redirect()->to(base_url('team/detailTeam/' . $project['id_team']));
         }
+    }
+
+    public function detailProject()
+    {
     }
 }

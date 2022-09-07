@@ -84,7 +84,7 @@
 
                                                 </div>
                                                 <div class="card-title">
-                                                    <a href="#">
+                                                    <a href="<?= base_url(); ?>/project/detailProject/<?= $p['id']; ?>">
                                                         <h5 data-filter-by="text"><?= $p['nama_project']; ?></h5>
                                                     </a>
                                                 </div>
@@ -103,7 +103,15 @@
                                                         <i class="material-icons mr-1">playlist_add_check</i>
                                                         <span class="text-small">6/10</span>
                                                     </div>
-                                                    <span class="text-small" data-filter-by="text">Due 4 days</span>
+                                                    <span class="text-small" data-filter-by="text">
+                                                        <?php
+                                                        $tanggal = new DateTime($p['tanggal_mulai']);
+                                                        $batas = new DateTime($p['batas_waktu']);
+                                                        $duedate = $batas->diff($tanggal);
+
+                                                        ?>
+                                                        Due <?= $duedate->d; ?> days
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -148,7 +156,15 @@
                                                         <i class="material-icons mr-1">playlist_add_check</i>
                                                         <span class="text-small">6/10</span>
                                                     </div>
-                                                    <span class="text-small" data-filter-by="text">Due 4 days</span>
+                                                    <span class="text-small" data-filter-by="text">
+                                                        <?php
+                                                        $tanggal = new DateTime($pu['tanggal_mulai']);
+                                                        $batas = new DateTime($pu['batas_waktu']);
+                                                        $duedate = $batas->diff($tanggal);
+
+                                                        ?>
+                                                        Due <?= $duedate->d; ?> days
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -375,7 +391,7 @@
                 </div>
                 <!--end of modal body-->
                 <div class="modal-footer">
-                    <a href="<?= base_url('team/detailTeam'); ?>/<?= $p['id_team    ']; ?>" role="button" class="btn btn-primary">
+                    <a href="<?= base_url('team/detailTeam'); ?>/<?= $p['id_team']; ?>" role="button" class="btn btn-primary">
                         Done
                     </a>
                 </div>

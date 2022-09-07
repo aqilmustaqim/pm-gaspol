@@ -71,6 +71,10 @@ class Team extends BaseController
 
     public function addTeam()
     {
+
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url());
+        }
         //Masukkan Database
         if ($this->teamModel->save([
             'team' => $this->request->getPost('namateam'),
@@ -115,6 +119,10 @@ class Team extends BaseController
 
     public function leaveTeam($idTeam)
     {
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url());
+        }
+
         $users = $this->usersModel->where('email', session()->get('email'))->first();
 
         $db      = \Config\Database::connect();
@@ -136,6 +144,16 @@ class Team extends BaseController
 
     public function deleteTeam($idTeam)
     {
+
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url());
+        } else {
+            //Kalau Ada Session
+            //Cek Apakah Admin Kalau Bukan Tendang
+            if (session()->get('role_id') != 1) {
+                return redirect()->to(base_url());
+            }
+        }
         //Hapus Team Dari Database
         if ($this->teamModel->delete($idTeam)) {
             //Kalau Berhasil Maka Cek Lagi Apakah Team yang dihapus ada membernya
@@ -166,6 +184,25 @@ class Team extends BaseController
             return redirect()->to(base_url());
         }
 
+        if (session()->get('role_id') != 1) {
+
+            //USERS
+            $users = $this->usersModel->where('email', session()->get('email'))->first();
+
+            //Cek Apakah Dia Ada Di Team Yang Benar
+            $db      = \Config\Database::connect();
+            $builder = $db->table('detail_team');
+            $builder->select('*');
+            $builder->where('id_team', $idTeam);
+            $builder->where('id_users', $users['id']);
+            $query = $builder->get();
+            $cekusers = $query->getResultArray();
+
+            if (!$cekusers) {
+                return redirect()->to(base_url('team'));
+            }
+        }
+
         //Menampilkan Semua Users Yang Status Nya Aktif
         $db      = \Config\Database::connect();
         $builder = $db->table('detail_team');
@@ -188,7 +225,7 @@ class Team extends BaseController
 
         $db      = \Config\Database::connect();
         $builder = $db->table('detail_project');
-        $builder->select('project.id as id_project,nama_project');
+        $builder->select('project.id as id_project,nama_project,tanggal_mulai,batas_waktu');
         $builder->join('project', 'detail_project.id_project = project.id');
         $builder->join('users', 'detail_project.id_users = users.id');
         $builder->where('id_team', $idTeam);
