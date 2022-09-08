@@ -2,9 +2,12 @@
 
 namespace App\Controllers;
 
+use App\Database\Migrations\DetailTeam;
 use App\Models\UsersModel;
 use App\Models\UserRoleModel;
 use App\Models\PositionModel;
+use App\Models\DetailProjectModel;
+use App\Models\DetailTeamModel;
 
 class Member extends BaseController
 {
@@ -12,12 +15,16 @@ class Member extends BaseController
     protected $usersModel;
     protected $userRoleModel;
     protected $positionModel;
+    protected $detailProjectModel;
+    protected $detailTeamModel;
 
     public function __construct()
     {
         $this->usersModel = new UsersModel();
         $this->userRoleModel = new UserRoleModel();
         $this->positionModel = new PositionModel();
+        $this->detailProjectModel = new DetailProjectModel();
+        $this->detailTeamModel = new DetailTeamModel();
     }
 
     public function index()
@@ -93,6 +100,21 @@ class Member extends BaseController
     public function deleteMember($id)
     {
         if ($this->usersModel->delete($id)) {
+
+            //Hapus Juga Member Itu Dari Team Dan Project
+            $projectMember = $this->detailProjectModel->where('id_users', $id)->findAll();
+            $teamMember = $this->detailTeamModel->where('id_users', $id)->findAll();
+
+            if ($projectMember) {
+                foreach ($projectMember as $pm) {
+                    $this->detailProjectModel->delete($pm['id']);
+                }
+            } else if ($teamMember) {
+                foreach ($teamMember as $tm) {
+                    $this->detailTeamModel->delete($tm['id']);
+                }
+            }
+
             session()->setFlashdata('member', 'Menghapus Member');
             return redirect()->to(base_url('member'));
         }

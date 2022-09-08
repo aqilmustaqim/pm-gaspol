@@ -137,7 +137,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="card-title">
-                                                    <a href="#">
+                                                    <a href="<?= base_url(); ?>/project/detailProject/<?= $pu['id_project']; ?>">
                                                         <h5 data-filter-by="text"><?= $pu['nama_project']; ?></h5>
                                                     </a>
                                                 </div>

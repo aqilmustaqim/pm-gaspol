@@ -16,7 +16,7 @@ class UsersApi extends ResourceController
     public function index()
     {
         $model = new UsersModel();
-        $datauser = $model->findAll();
+        $datauser['users'] = $model->findAll();
 
         return $this->respond($datauser);
     }

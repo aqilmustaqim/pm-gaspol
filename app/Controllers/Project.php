@@ -125,7 +125,41 @@ class Project extends BaseController
         }
     }
 
-    public function detailProject()
+    public function detailProject($id)
     {
+        $usersProject = $this->usersModel->where('email', session()->get('email'))->first();
+
+        //Validasi Login
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url());
+        }
+
+        if (session()->get('role_id') != 1) {
+            //Cek Apakah Users Ada Di Dalam Project Ini
+            $db      = \Config\Database::connect();
+            $builder = $db->table('detail_project');
+            $builder->select('*');
+            $builder->where('id_project', $id);
+            $builder->where('id_users', $usersProject['id']);
+            $query = $builder->get();
+            $projectUsers = $query->getRowArray();
+
+            if ($projectUsers == null) {
+                return redirect()->to(base_url('team'));
+            }
+        }
+        //Akhir Validasi 
+
+        //Tampilkan Data Detail Project Nya
+        $dataProject = $this->projectModel->where('id', $id)->first();
+
+
+        $data = [
+            'title' => 'PM Gaspol || Detail Project',
+            'bread' => 'Detail Project',
+            'project' => $dataProject
+        ];
+
+        return view('project/detailProject', $data);
     }
 }
