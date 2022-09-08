@@ -105,6 +105,17 @@ if ( swal2 ){
     })
 }
 
+//Flash Data Project
+const swal3 = $('.project').data('project'); //Ambil Data FlashDatanya
+if ( swal3 ){
+    //Kalau Ada isinya jalankan sweetalert
+    Swal.fire({
+        title: 'Data Project ',
+        text: 'Berhasil ' + swal3,
+        icon: 'success'
+    })
+}
+
 
 
 

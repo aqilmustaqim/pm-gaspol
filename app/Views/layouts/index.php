@@ -490,6 +490,74 @@
 
             }
         });
+
+        //Fungsi Add Task
+        $('.tombol-add-task').on('click', function() {
+            //Tangkap Semua Inputan
+            let namaTask = $('#namaTask').val();
+            let deskripsiTask = $('#deskripsiTask').val();
+            let tanggalTask = $('#tanggalTask').val();
+            let batasTask = $('#batasTask').val();
+            let idProject = $('#idProject').val();
+
+            //Cek Biar Jangan Kosong
+            if (namaTask == '') {
+                Swal.fire({
+                    title: 'Task',
+                    text: 'Nama Task Tidak Boleh Kosong !',
+                    icon: 'error'
+                });
+            } else if (deskripsiTask == '') {
+                Swal.fire({
+                    title: 'Task',
+                    text: 'Deskripsi Task Tidak Boleh Kosong !',
+                    icon: 'error'
+                });
+            } else if (tanggalTask == '') {
+                Swal.fire({
+                    title: 'Task ',
+                    text: 'Tanggal Task Tidak Boleh Kosong !',
+                    icon: 'error'
+                });
+            } else if (batasTask == '') {
+                Swal.fire({
+                    title: 'Task ',
+                    text: 'Batas Task Tidak Boleh Kosong !',
+                    icon: 'error'
+                });
+            } else {
+
+                //Kalau Ada Isinya Semua Tampilin Ajax
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url(); ?>/project/addTask",
+                    data: {
+                        idProject: idProject,
+                        namaTask: namaTask,
+                        deskripsiTask: deskripsiTask,
+                        tanggalTask: tanggalTask,
+                        batasTask: batasTask
+
+                    },
+                    success: function(data) {
+                        if (data == "berhasil") {
+                            Swal.fire({
+                                title: 'Add Task',
+                                text: 'Berhasil Di Add !',
+                                icon: 'success'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "<?= base_url(); ?>/project/detailProject/" + idProject;
+                                }
+                            })
+                        }
+
+                    }
+                });
+
+
+            }
+        });
     </script>
 </body>
 

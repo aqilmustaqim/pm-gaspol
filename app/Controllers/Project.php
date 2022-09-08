@@ -8,6 +8,7 @@ use App\Models\UsersModel;
 use App\Models\DetailTeamModel;
 use App\Models\ProjectModel;
 use App\Models\DetailProjectModel;
+use App\Models\TaskModel;
 
 use function PHPSTORM_META\map;
 
@@ -19,6 +20,7 @@ class Project extends BaseController
     protected $detailTeamModel;
     protected $projectModel;
     protected $detailProjectModel;
+    protected $taskModel;
 
     public function __construct()
     {
@@ -27,6 +29,7 @@ class Project extends BaseController
         $this->detailTeamModel = new DetailTeamModel();
         $this->projectModel = new ProjectModel();
         $this->detailProjectModel = new DetailProjectModel();
+        $this->taskModel = new TaskModel();
     }
 
     public function addProject()
@@ -161,5 +164,24 @@ class Project extends BaseController
         ];
 
         return view('project/detailProject', $data);
+    }
+
+    public function addTask()
+    {
+        $idProject = $this->request->getPost('idProject');
+        //Masukkan Ke Database Dong
+        if ($this->taskModel->save([
+            'id_project' => $this->request->getPost('idProject'),
+            'nama_task' => $this->request->getPost('namaTask'),
+            'deskripsi_task' => $this->request->getPost('deskripsiTask'),
+            'tanggal_task' => $this->request->getPost('tanggalTask'),
+            'batas_task' => $this->request->getPost('batasTask'),
+            'status_task' => 0
+        ])) {
+            echo 'berhasil';
+            //Kalau Berhasil Jalankan Session 
+            //session()->getFlashdata('project', 'Menambahkan Task');
+            //return redirect()->to(base_url('project/detailProject/' . $this->request->getPost('idProject')));
+        }
     }
 }
