@@ -38,7 +38,8 @@ class Auth extends BaseController
     public function register()
     {
         $data = [
-            'title' => 'PM-GASPOL || Register'
+            'title' => 'PM-GASPOL || Register',
+            'validation' => \Config\Services::validation()
         ];
         return view('auth/register', $data);
     }
@@ -46,11 +47,39 @@ class Auth extends BaseController
     public function registerSave()
     {
         //Cek Data Input
+        //Validasi Form Terlebih Dahulu
+        if (!$this->validate([
+            //Field Yang mau divalidasi
+            'nama' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Nama Wajib Diisi ! '
+                ]
+            ],
+            'email' => [
+                'rules' => 'required|is_unique[users.email]',
+                'errors' => [
+                    'required' => 'Email Wajib Diisi ! ',
+                    'is_unique' => 'Email Sudah Terdaftar !'
+                ]
+            ],
+            'password' => [
+                'rules' => 'required|min_length[8]',
+                'errors' => [
+                    'required' => 'Password Wajib Diisi ! ',
+                    'min_length' => 'Password Minimal 8 Karakter !'
+                ]
+            ]
+        ])) {
+            //Kalau tidak tervalidasi
+            return redirect()->to(base_url('/auth/register'))->withInput();
+        }
+
         //Input Database
         if ($this->usersModel->save([
             'nama' => $this->request->getVar('nama'),
             'email' => $this->request->getVar('email'),
-            'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
+            'password' => md5($this->request->getVar('password')),
             'role_id' => 3,
             'is_active' => 0,
             'posisi_id' => 1,
@@ -90,7 +119,9 @@ class Auth extends BaseController
         $user = $this->usersModel->where(['email' => $email])->first();
         if ($user) {
             //Kalau ada user nya cek passwordnya sama atau tidak dengan inputan 
-            if (password_verify($password, $user['password'])) {
+            //$user['password'] === md5($password) => MD5
+            //password_verify($password, $user['password']) => PASSWORD DEFAULT
+            if ($user['password'] === md5($password)) {
                 //Kalau Password Nya sama maka cek apakah usernya aktif ?
                 if ($user['is_active'] == 1) {
                     //Kalau usernya aktif maka login berhasil
@@ -215,7 +246,7 @@ class Auth extends BaseController
             //Kalau Bener Masukkan Database Password Barunya
             if ($this->usersModel->save([
                 'id' => $user['id'],
-                'password' => password_hash($passwordbaru, PASSWORD_DEFAULT)
+                'password' => md5($passwordbaru)
             ])) {
                 echo 'berhasil';
             }

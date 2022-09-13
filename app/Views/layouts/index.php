@@ -355,6 +355,38 @@
             });
         });
 
+        //Fungsi Checkbox Member Task
+        $('.checkbox-member-task').on('click', function() {
+            const idTask = $(this).data('task');
+            const idUser = $(this).data('user');
+
+            $.ajax({
+                method: "POST",
+                url: "<?= base_url(); ?>/project/addMemberTask",
+                data: {
+                    idTask: idTask,
+                    idUser: idUser
+                },
+                success: function(data) {
+                    if (data == "berhasil") {
+                        Swal.fire({
+                            title: 'Add Member Task',
+                            text: 'Berhasil !',
+                            icon: 'success'
+                        })
+                    } else if (data == "hapus") {
+                        Swal.fire({
+                            title: 'Add Member Task',
+                            text: 'Di Hapus !',
+                            icon: 'error'
+                        })
+                    }
+
+                }
+            });
+        });
+
+
         //Fungsi Add Project
         $('.tombol-add-project').on('click', function() {
             //Tangkap Semua Inputan

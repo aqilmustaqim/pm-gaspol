@@ -9,6 +9,7 @@ use App\Models\DetailTeamModel;
 use App\Models\ProjectModel;
 use App\Models\DetailProjectModel;
 use App\Models\TaskModel;
+use App\Models\DetailTaskModel;
 
 use function PHPSTORM_META\map;
 
@@ -20,6 +21,7 @@ class Project extends BaseController
     protected $detailTeamModel;
     protected $projectModel;
     protected $detailProjectModel;
+    protected $detailTaskModel;
     protected $taskModel;
 
     public function __construct()
@@ -29,6 +31,7 @@ class Project extends BaseController
         $this->detailTeamModel = new DetailTeamModel();
         $this->projectModel = new ProjectModel();
         $this->detailProjectModel = new DetailProjectModel();
+        $this->detailTaskModel = new DetailTaskModel();
         $this->taskModel = new TaskModel();
     }
 
@@ -156,11 +159,50 @@ class Project extends BaseController
         //Tampilkan Data Detail Project Nya
         $dataProject = $this->projectModel->where('id', $id)->first();
 
+        //Tampilkan Data Tasknya Untuk ( ADMIN DAN LEADER )
+        $dataTask = $this->taskModel->where('id_project', $id)->findAll();
+
+        //Tampilkan Data Task Untuk ( MEMBER )
+
+        $users = $this->usersModel->where('email', session()->get('email'))->first();
+
+        $db      = \Config\Database::connect();
+        $builder = $db->table('detail_task');
+        $builder->select('id_task,nama_task,deskripsi_task,tanggal_task,batas_task');
+        $builder->join('task', 'detail_task.id_task = task.id');
+        $builder->join('users', 'detail_task.id_users = users.id');
+        $builder->where('id_project', $id);
+        $builder->where('id_users', $users['id']);
+        $query = $builder->get();
+        $dataTaskMember = $query->getResultArray();
+
+        //Menghitung Total Task
+        $db      = \Config\Database::connect();
+        $builder = $db->table('task');
+        $builder->selectCount('id');
+        $builder->where('id_project', $id);
+        $query = $builder->get();
+        $hasil = $query->getRowArray();
+        $totalTask = $hasil['id'];
+
+        //Menampilkan Data Users Yang Ada Di Dalam Projectnya
+        $db      = \Config\Database::connect();
+        $builder = $db->table('detail_project');
+        $builder->select('detail_project.id as id_detail_project,users.id as id,nama,foto');
+        $builder->join('users', 'detail_project.id_users = users.id');
+        $builder->where('id_project', $id);
+        $builder->where('is_active', '1');
+        $query = $builder->get();
+        $datausers = $query->getResultArray();
 
         $data = [
             'title' => 'PM Gaspol || Detail Project',
             'bread' => 'Detail Project',
-            'project' => $dataProject
+            'project' => $dataProject,
+            'task' => $dataTask,
+            'taskmember' => $dataTaskMember,
+            'totalTask' => $totalTask,
+            'datausers' => $datausers
         ];
 
         return view('project/detailProject', $data);
@@ -168,7 +210,6 @@ class Project extends BaseController
 
     public function addTask()
     {
-        $idProject = $this->request->getPost('idProject');
         //Masukkan Ke Database Dong
         if ($this->taskModel->save([
             'id_project' => $this->request->getPost('idProject'),
@@ -182,6 +223,40 @@ class Project extends BaseController
             //Kalau Berhasil Jalankan Session 
             //session()->getFlashdata('project', 'Menambahkan Task');
             //return redirect()->to(base_url('project/detailProject/' . $this->request->getPost('idProject')));
+        }
+    }
+
+    public function addMemberTask()
+    {
+
+        //Tangkap Inputan
+        $idTask = $this->request->getPost('idTask');
+        $idUser = $this->request->getPost('idUser');
+
+        //cek apakah datanya ada 
+        $db      = \Config\Database::connect();
+        $builder = $db->table('detail_task');
+        $builder->select('*');
+        $builder->where('id_task', $idTask);
+        $builder->where('id_users', $idUser);
+        $query = $builder->get();
+        $detailTask = $query->getRowArray();
+
+        //Masukkan Database
+
+        if ($detailTask == null) {
+            //Kalau Datanya Kosong Berarti Datanya mau di insert
+            if ($this->detailTaskModel->save([
+                'id_task' => $idTask,
+                'id_users' => $idUser
+            ])) {
+                echo 'berhasil';
+            }
+        } else {
+            //Kalau Datanya Ada Berarti Datanya Mau Di Hapus
+            if ($this->detailTaskModel->delete($detailTask['id'])) {
+                echo 'hapus';
+            }
         }
     }
 }
