@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 13, 2022 at 09:12 AM
+-- Generation Time: Sep 15, 2022 at 08:38 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.28
 
@@ -66,7 +66,9 @@ CREATE TABLE `detail_task` (
 INSERT INTO `detail_task` (`id`, `id_task`, `id_users`) VALUES
 (1, 4, 9),
 (3, 4, 11),
-(4, 5, 9);
+(4, 5, 9),
+(5, 8, 9),
+(6, 8, 11);
 
 -- --------------------------------------------------------
 
@@ -97,6 +99,29 @@ INSERT INTO `detail_team` (`id`, `id_team`, `id_project`, `id_users`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `list_task`
+--
+
+CREATE TABLE `list_task` (
+  `id` int(11) NOT NULL,
+  `id_task` int(11) NOT NULL,
+  `list` varchar(225) NOT NULL,
+  `status_list` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `list_task`
+--
+
+INSERT INTO `list_task` (`id`, `id_task`, `list`, `status_list`) VALUES
+(1, 4, 'Create Ajax', 1),
+(3, 4, 'CRUD Ajax', 1),
+(4, 8, 'Add Plugin', 0),
+(5, 8, 'Add Elementor', 0);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `migrations`
 --
 
@@ -123,7 +148,8 @@ INSERT INTO `migrations` (`id`, `version`, `class`, `group`, `namespace`, `time`
 (6, '2022-08-31-073127', 'App\\Database\\Migrations\\Project', 'default', 'App', 1661931332, 5),
 (7, '2022-09-01-074631', 'App\\Database\\Migrations\\DetailProject', 'default', 'App', 1662018644, 6),
 (8, '2022-09-08-054403', 'App\\Database\\Migrations\\Task', 'default', 'App', 1662615984, 7),
-(9, '2022-09-08-090016', 'App\\Database\\Migrations\\DetailTask', 'default', 'App', 1662627738, 8);
+(9, '2022-09-08-090016', 'App\\Database\\Migrations\\DetailTask', 'default', 'App', 1662627738, 8),
+(10, '2022-09-14-045013', 'App\\Database\\Migrations\\ListTask', 'default', 'App', 1663131129, 9);
 
 -- --------------------------------------------------------
 
@@ -193,7 +219,8 @@ INSERT INTO `task` (`id`, `id_project`, `nama_task`, `deskripsi_task`, `tanggal_
 (4, 1, 'Fitur Sistem Login', 'Membuat Hak Akses Admin Dan Member', '2022-09-08', '2022-09-10', 0),
 (5, 1, 'Fitur Team', 'Membuat CRUD Dan Pengelompokan Member Ke Team', '2022-09-08', '2022-09-18', 0),
 (6, 1, 'Membuat Fitur Checklist Add Member', 'Membuat Add Member Dengan Centang Checklist Menggunakan Jquery AJAX', '2022-09-08', '2022-09-24', 0),
-(7, 2, 'Fitur Task', 'Membuat Fitur Task Untung Masing Masing Member Sesuai Dengan Team nya', '2022-09-08', '2022-09-12', 0);
+(7, 2, 'Fitur Task', 'Membuat Fitur Task Untung Masing Masing Member Sesuai Dengan Team nya', '2022-09-08', '2022-09-12', 0),
+(8, 10, 'Install Wordpress', 'Menginstall', '2022-09-14', '2022-09-23', 0);
 
 -- --------------------------------------------------------
 
@@ -295,6 +322,12 @@ ALTER TABLE `detail_team`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `list_task`
+--
+ALTER TABLE `list_task`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `migrations`
 --
 ALTER TABLE `migrations`
@@ -351,7 +384,7 @@ ALTER TABLE `detail_project`
 -- AUTO_INCREMENT for table `detail_task`
 --
 ALTER TABLE `detail_task`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `detail_team`
@@ -360,10 +393,16 @@ ALTER TABLE `detail_team`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
+-- AUTO_INCREMENT for table `list_task`
+--
+ALTER TABLE `list_task`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `position`
@@ -381,7 +420,7 @@ ALTER TABLE `project`
 -- AUTO_INCREMENT for table `task`
 --
 ALTER TABLE `task`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `team`

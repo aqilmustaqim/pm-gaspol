@@ -105,7 +105,7 @@
                                                     </div>
                                                     <span class="text-small" data-filter-by="text">
                                                         <?php
-                                                        $tanggal = new DateTime($p['tanggal_mulai']);
+                                                        $tanggal = new DateTime(date('Y-m-d'));
                                                         $batas = new DateTime($p['batas_waktu']);
                                                         $duedate = $batas->diff($tanggal);
 

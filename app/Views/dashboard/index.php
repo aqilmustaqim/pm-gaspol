@@ -7,9 +7,15 @@
                 <h1>Welcome Dashboard <?= session()->get('nama'); ?> &#x2615;</h1>
                 <p class="lead">A small web studio crafting lovely template products.</p>
             </div>
-            <hr>
 
         </div>
+        <hr>
+        <div style="width: 400px;">
+            <canvas id="myChart"></canvas>
+        </div>
+
     </div>
 </div>
+
+
 <?= $this->endSection(); ?>

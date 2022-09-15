@@ -47,6 +47,19 @@ function check_member_task($idTask, $iduser)
     }
 }
 
+function totalProject($idTeam)
+{
+    $db      = \Config\Database::connect();
+    $builder = $db->table('project');
+    $builder->selectCount('id');
+    $builder->where('id_team', $idTeam);
+    $query = $builder->get();
+    $access4 = $query->getResultArray();
+
+
+    return $access4;
+}
+
 function check_list($idList)
 {
     $db      = \Config\Database::connect();

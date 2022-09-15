@@ -6,7 +6,7 @@
     <title><?= $title; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A project management Bootstrap theme by Medium Rare">
-    <link href="<?= base_url(); ?>/assets/img/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="<?= base_url(); ?>/assets/img/favnew.png" rel="icon" type="image/x-icon">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Gothic+A1" rel="stylesheet">
     <link href="<?= base_url(); ?>/assets/css/theme.css" rel="stylesheet" type="text/css" media="all" />

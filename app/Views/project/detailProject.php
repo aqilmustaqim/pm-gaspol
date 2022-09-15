@@ -29,7 +29,7 @@
                             <span>3/<?= $totalTask; ?></span>
                         </div>
                         <?php
-                        $tanggal = new DateTime($project['tanggal_mulai']);
+                        $tanggal = new DateTime(date('Y-m-d'));
                         $batas = new DateTime($project['batas_waktu']);
                         $duedate = $batas->diff($tanggal);
 
@@ -96,7 +96,7 @@
                                                         <h6 data-filter-by="text"><?= $tm['nama_task']; ?></h6>
                                                     </a>
                                                     <?php
-                                                    $tanggal = new DateTime($tm['tanggal_task']);
+                                                    $tanggal = new DateTime(date('Y-m-d'));
                                                     $batas = new DateTime($tm['batas_task']);
                                                     $duedate = $batas->diff($tanggal);
 
@@ -145,7 +145,7 @@
                                                         <h6 data-filter-by="text"><?= $t['nama_task']; ?></h6>
                                                     </a>
                                                     <?php
-                                                    $tanggal = new DateTime($t['tanggal_task']);
+                                                    $tanggal = new DateTime(date('Y-m-d'));
                                                     $batas = new DateTime($t['batas_task']);
                                                     $duedate = $batas->diff($tanggal);
 

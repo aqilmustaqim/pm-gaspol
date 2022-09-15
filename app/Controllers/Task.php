@@ -73,12 +73,31 @@ class Task extends BaseController
         //Menampilkan Data List Task ( ADMIN DAN LEADER )
         $datalist = $this->listTaskModel->where('id_task', $idTask)->findAll();
 
+        //Menampilkan semua Total Checklist
+        $db      = \Config\Database::connect();
+        $builder = $db->table('list_task');
+        $builder->selectCount('id');
+        $builder->where('id_task', $idTask);
+        $query = $builder->get();
+        $totalchecklist = $query->getRowArray();
+
+        //Menampilkan Semua Total Checklist Yang Udah Selesai
+        $db      = \Config\Database::connect();
+        $builder = $db->table('list_task');
+        $builder->selectCount('id');
+        $builder->where('id_task', $idTask);
+        $builder->where('status_list', 1);
+        $query = $builder->get();
+        $totalchecklistdone = $query->getRowArray();
+
         $data = [
             'title' => 'PM Gaspol || Detail Task',
             'bread' => 'Detail Task',
             'task' => $datatask,
             'membertask' => $memberTask,
-            'list' => $datalist
+            'list' => $datalist,
+            'totalchecklist' => $totalchecklist,
+            'totalchecklistdone' => $totalchecklistdone
         ];
 
         return view('task/detailTask', $data);

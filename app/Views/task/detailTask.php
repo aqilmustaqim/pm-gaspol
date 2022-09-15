@@ -30,9 +30,14 @@
                     <div class="d-flex justify-content-between text-small">
                         <div class="d-flex align-items-center">
                             <i class="material-icons">playlist_add_check</i>
-                            <span>3/7</span>
+                            <span><?= $totalchecklistdone['id']; ?>/<?= $totalchecklist['id']; ?></span>
                         </div>
-                        <span>Due 14 days</span>
+                        <?php
+                        $tanggal = new DateTime(date('Y-m-d'));
+                        $batas = new DateTime($task['batas_task']);
+                        $duedate = $batas->diff($tanggal);
+                        ?>
+                        <span>Due <?= $duedate->d; ?> days</span>
                     </div>
                 </div>
             </div>
