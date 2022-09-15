@@ -47,6 +47,21 @@ function check_member_task($idTask, $iduser)
     }
 }
 
+function check_list($idList)
+{
+    $db      = \Config\Database::connect();
+    $builder = $db->table('list_task');
+    $builder->select('*');
+    $builder->where('id', $idList);
+    $builder->where('status_list', 1);
+    $query = $builder->get();
+    $access3 = $query->getResultArray();
+
+    if ($access3) {
+        return "checked='checked'";
+    }
+}
+
 function detailFotoTeam($idTeam)
 {
     $db      = \Config\Database::connect();

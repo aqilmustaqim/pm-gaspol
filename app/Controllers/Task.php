@@ -8,6 +8,7 @@ use App\Models\ProjectModel;
 use App\Models\DetailProjectModel;
 use App\Models\TaskModel;
 use App\Models\DetailTaskModel;
+use App\Models\ListTaskModel;
 
 use function PHPSTORM_META\map;
 
@@ -19,6 +20,7 @@ class Task extends BaseController
     protected $detailProjectModel;
     protected $detailTaskModel;
     protected $taskModel;
+    protected $listTaskModel;
 
     public function __construct()
     {
@@ -27,10 +29,12 @@ class Task extends BaseController
         $this->detailProjectModel = new DetailProjectModel();
         $this->detailTaskModel = new DetailTaskModel();
         $this->taskModel = new TaskModel();
+        $this->listTaskModel = new ListTaskModel();
     }
 
     public function detailTask($idTask)
     {
+        //Ambil Data Yang Login
         $usersTask = $this->usersModel->where('email', session()->get('email'))->first();
 
         //Validasi Login
@@ -54,9 +58,10 @@ class Task extends BaseController
         }
         //Akhir Validasi 
 
-        //Tampilkan Data Detail Project Nya
+        //Tampilkan Data Detail Task Nya
         $datatask = $this->taskModel->where('id', $idTask)->first();
-        //Menampilkan Data Users Yang Ada Di Dalam Tasknya
+
+        //Menampilkan Data Users Yang Ada Di Dalam Tasknya ( FOTO NAMA DLL )
         $db      = \Config\Database::connect();
         $builder = $db->table('detail_task');
         $builder->select('detail_task.id as id_detail_task,users.id as id,nama,foto');
@@ -65,64 +70,67 @@ class Task extends BaseController
         $query = $builder->get();
         $memberTask = $query->getResultArray();
 
+        //Menampilkan Data List Task ( ADMIN DAN LEADER )
+        $datalist = $this->listTaskModel->where('id_task', $idTask)->findAll();
+
         $data = [
             'title' => 'PM Gaspol || Detail Task',
             'bread' => 'Detail Task',
             'task' => $datatask,
-            'membertask' => $memberTask
+            'membertask' => $memberTask,
+            'list' => $datalist
         ];
 
         return view('task/detailTask', $data);
     }
 
-    public function addTask()
+    public function addList()
     {
-        //Masukkan Ke Database Dong
-        if ($this->taskModel->save([
-            'id_project' => $this->request->getPost('idProject'),
-            'nama_task' => $this->request->getPost('namaTask'),
-            'deskripsi_task' => $this->request->getPost('deskripsiTask'),
-            'tanggal_task' => $this->request->getPost('tanggalTask'),
-            'batas_task' => $this->request->getPost('batasTask'),
-            'status_task' => 0
+        //Tangkap Inputan 
+        $idTask = $this->request->getVar('idTask');
+        $namaList = $this->request->getVar('namaList');
+
+        //Masukkan Database
+        if ($this->listTaskModel->save([
+            'id_task' => $idTask,
+            'list' => $namaList,
+            'status_list' => 0
         ])) {
             echo 'berhasil';
-            //Kalau Berhasil Jalankan Session 
-            //session()->getFlashdata('project', 'Menambahkan Task');
-            //return redirect()->to(base_url('project/detailProject/' . $this->request->getPost('idProject')));
         }
     }
 
-    public function addMemberTask()
+    public function addStatusList()
     {
-
-        //Tangkap Inputan
-        $idTask = $this->request->getPost('idTask');
-        $idUser = $this->request->getPost('idUser');
+        //Tangkap Inputannya
+        $idList = $this->request->getPost('idList');
 
         //cek apakah datanya ada 
         $db      = \Config\Database::connect();
-        $builder = $db->table('detail_task');
+        $builder = $db->table('list_task');
         $builder->select('*');
-        $builder->where('id_task', $idTask);
-        $builder->where('id_users', $idUser);
+        $builder->where('id', $idList);
+        $builder->where('status_list', 0);
         $query = $builder->get();
-        $detailTask = $query->getRowArray();
+        $statuslist = $query->getRowArray();
 
-        //Masukkan Database
-
-        if ($detailTask == null) {
-            //Kalau Datanya Kosong Berarti Datanya mau di insert
-            if ($this->detailTaskModel->save([
-                'id_task' => $idTask,
-                'id_users' => $idUser
+        //Kalau Datanya Gak Ada Berarti Status nya jadi 0
+        if ($statuslist == null) {
+            //Masukan
+            //Masukkan Ke Database Dong
+            if ($this->listTaskModel->save([
+                'id' => $idList,
+                'status_list' => 0
             ])) {
-                echo 'berhasil';
+                echo 'tidakselesai';
             }
         } else {
-            //Kalau Datanya Ada Berarti Datanya Mau Di Hapus
-            if ($this->detailTaskModel->delete($detailTask['id'])) {
-                echo 'hapus';
+            //Kalau ada berarti statusnya mau diubah ke 1
+            if ($this->listTaskModel->save([
+                'id' => $idList,
+                'status_list' => 1
+            ])) {
+                echo 'selesai';
             }
         }
     }

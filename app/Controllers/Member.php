@@ -8,6 +8,7 @@ use App\Models\UserRoleModel;
 use App\Models\PositionModel;
 use App\Models\DetailProjectModel;
 use App\Models\DetailTeamModel;
+use App\Models\DetailTaskModel;
 
 class Member extends BaseController
 {
@@ -17,6 +18,7 @@ class Member extends BaseController
     protected $positionModel;
     protected $detailProjectModel;
     protected $detailTeamModel;
+    protected $detailTaskModel;
 
     public function __construct()
     {
@@ -25,6 +27,7 @@ class Member extends BaseController
         $this->positionModel = new PositionModel();
         $this->detailProjectModel = new DetailProjectModel();
         $this->detailTeamModel = new DetailTeamModel();
+        $this->detailTaskModel = new DetailTaskModel();
     }
 
     public function index()
@@ -101,9 +104,10 @@ class Member extends BaseController
     {
         if ($this->usersModel->delete($id)) {
 
-            //Hapus Juga Member Itu Dari Team Dan Project
+            //Hapus Juga Member Itu Dari Team Dan Project Dan Task
             $projectMember = $this->detailProjectModel->where('id_users', $id)->findAll();
             $teamMember = $this->detailTeamModel->where('id_users', $id)->findAll();
+            $taskMember = $this->detailTaskModel->where('id_users', $id)->findAll();
 
             if ($projectMember) {
                 foreach ($projectMember as $pm) {
@@ -111,6 +115,10 @@ class Member extends BaseController
                 }
             } else if ($teamMember) {
                 foreach ($teamMember as $tm) {
+                    $this->detailTeamModel->delete($tm['id']);
+                }
+            } else if ($taskMember) {
+                foreach ($taskMember as $tm) {
                     $this->detailTeamModel->delete($tm['id']);
                 }
             }

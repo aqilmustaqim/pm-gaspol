@@ -386,6 +386,35 @@
             });
         });
 
+        //Fungsi Checkbox List
+        $('.checkbox-list').on('click', function() {
+            const idList = $(this).data('list');
+
+            $.ajax({
+                method: "POST",
+                url: "<?= base_url(); ?>/task/addStatusList",
+                data: {
+                    idList: idList
+                },
+                success: function(data) {
+                    if (data == "selesai") {
+                        Swal.fire({
+                            title: 'List',
+                            text: 'Selesai Di Kerjakan !',
+                            icon: 'success'
+                        })
+                    } else if (data == "tidakselesai") {
+                        Swal.fire({
+                            title: 'List',
+                            text: 'Belum Selesai !',
+                            icon: 'error'
+                        })
+                    }
+
+                }
+            });
+        });
+
 
         //Fungsi Add Project
         $('.tombol-add-project').on('click', function() {
@@ -580,6 +609,49 @@
                             }).then((result) => {
                                 if (result.isConfirmed) {
                                     window.location.href = "<?= base_url(); ?>/project/detailProject/" + idProject;
+                                }
+                            })
+                        }
+
+                    }
+                });
+
+
+            }
+        });
+
+        //Fungsi Add List
+        $('.tombol-add-list').on('click', function() {
+            //Tangkap Semua Inputan
+            let namaList = $('#namaList').val();
+            let idTask = $('#idTask').val();
+
+            //Cek Biar Jangan Kosong
+            if (namaList == '') {
+                Swal.fire({
+                    title: 'Checklist',
+                    text: 'Nama List Tidak Boleh Kosong !',
+                    icon: 'error'
+                });
+            } else {
+
+                //Kalau Ada Isinya Semua Tampilin Ajax
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url(); ?>/task/addList",
+                    data: {
+                        idTask: idTask,
+                        namaList: namaList
+                    },
+                    success: function(data) {
+                        if (data == "berhasil") {
+                            Swal.fire({
+                                title: 'Add List',
+                                text: 'Berhasil Di Add !',
+                                icon: 'success'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "<?= base_url(); ?>/task/detailTask/" + idTask;
                                 }
                             })
                         }
