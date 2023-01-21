@@ -41,6 +41,7 @@ $routes->get('/', 'Auth::index');
 $routes->get('usersapi', 'UsersApi::index');
 $routes->get('usersapi/(:segment)', 'UsersApi::show/$1');
 $routes->post('usersapi', 'UsersApi::create');
+$routes->post('authapi', 'AuthApi::login');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

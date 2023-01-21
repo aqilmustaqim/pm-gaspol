@@ -19,6 +19,15 @@ class Superadmin extends BaseController
         $query = $builder->get();
         $team = $query->getResultArray();
 
+        //Mengambil Data Team Yang Ada Project
+        $db      = \Config\Database::connect();
+        $builder = $db->table('detail_project');
+        $builder->select('nama_project,status_project,team,id_team');
+        $builder->join('project', 'detail_project.id_project = project.id');
+        $builder->distinct();
+        $builder->join('team', 'project.id_team = team.id');
+        $query = $builder->get();
+        $teamproject = $query->getResultArray();
 
 
 
@@ -29,7 +38,8 @@ class Superadmin extends BaseController
         $data = [
             'title' => 'PM Gaspol || Dashboard',
             'bread' => 'Dashboard',
-            'team' => $team
+            'team' => $team,
+            'teamproject' => $teamproject
         ];
 
         return view('superadmin/index', $data);

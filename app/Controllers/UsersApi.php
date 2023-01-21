@@ -5,6 +5,11 @@ namespace App\Controllers;
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\API\ResponseTrait;
 use App\Models\UsersModel;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use CodeIgniter\Model;
+
+use function PHPUnit\Framework\returnSelf;
 
 class UsersApi extends ResourceController
 {
@@ -39,11 +44,10 @@ class UsersApi extends ResourceController
             'nama' => $this->request->getVar('nama'),
             'email' => $this->request->getVar('email'),
             'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
-            'foto' => $this->request->getVar('foto'),
-            'role_id' => $this->request->getVar('role_id'),
-            'posisi_id' => $this->request->getVar('posisi_id'),
-            'is_active' => $this->request->getVar('is_active'),
-            'role_id' => $this->request->getVar('role_id'),
+            'foto' => 'default.png',
+            'role_id' => 3,
+            'posisi_id' => 1,
+            'is_active' => 1,
             'created_at' => $this->request->getVar('created_at'),
             'updated_at' => $this->request->getVar('updated_at')
         ];

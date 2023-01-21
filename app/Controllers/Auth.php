@@ -20,6 +20,8 @@ class Auth extends BaseController
     public function index()
     {
 
+
+
         if (session()->get('logged_in')) {
             if (session()->get('role_id') == 1) {
                 return redirect()->to(base_url('superadmin'));
