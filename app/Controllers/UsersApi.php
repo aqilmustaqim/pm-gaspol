@@ -43,7 +43,7 @@ class UsersApi extends ResourceController
         $data = [
             'nama' => $this->request->getVar('nama'),
             'email' => $this->request->getVar('email'),
-            'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
+            'password' => md5($this->request->getVar('password')),
             'foto' => 'default.png',
             'role_id' => 3,
             'posisi_id' => 1,
