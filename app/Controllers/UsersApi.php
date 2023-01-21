@@ -47,7 +47,7 @@ class UsersApi extends ResourceController
             'foto' => 'default.png',
             'role_id' => 3,
             'posisi_id' => 1,
-            'is_active' => 1,
+            'is_active' => 0,
             'created_at' => $this->request->getVar('created_at'),
             'updated_at' => $this->request->getVar('updated_at')
         ];

@@ -32,7 +32,7 @@ class AuthApi extends ResourceController
 
 
         if ($user['password'] == md5($this->request->getVar('password'))) {
-            return $this->respond('OK');
+            return $this->respond('OK NANTI TOKETNYA DISINI');
         } else {
             return $this->fail('Password Salah');
         }
