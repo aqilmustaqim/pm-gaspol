@@ -5,6 +5,7 @@ namespace App\Controllers;
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\API\ResponseTrait;
 use App\Models\UsersModel;
+use Firebase\JWT\Key;
 use Firebase\JWT\JWT;
 
 class AuthApi extends ResourceController
@@ -32,7 +33,26 @@ class AuthApi extends ResourceController
 
 
         if ($user['password'] == md5($this->request->getVar('password'))) {
-            return $this->respond('OK NANTI TOKETNYA DISINI');
+            //JWT
+            //1.Ambil Token Secret
+            $key = getenv('JWT_SECRET_KEY');
+            //2. ISI PAYLOAD
+            $payload = array(
+                "iat" => time(),
+                "exp" => time() + 60,
+                "uid" => $user['id'],
+                "email" => $user['email']
+            );
+
+            $token = JWT::encode($payload, $key, 'HS256');
+
+            $response =  [
+                'message' => 'Login Berhasil',
+                'id' => $user['id'],
+                'email' => $user['email'],
+                'token' => $token
+            ];
+            return $this->respond($response);
         } else {
             return $this->fail('Password Salah');
         }

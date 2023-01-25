@@ -38,7 +38,8 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'Auth::index');
 //$routes->resource('usersapi');
-$routes->get('usersapi', 'UsersApi::index');
+
+$routes->get('usersapi', 'UsersApi::index', ['filter' => 'auth']); //Filter Routersnya
 $routes->get('usersapi/(:segment)', 'UsersApi::show/$1');
 $routes->post('usersapi', 'UsersApi::create');
 $routes->post('authapi', 'AuthApi::login');
