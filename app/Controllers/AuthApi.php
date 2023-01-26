@@ -41,6 +41,7 @@ class AuthApi extends ResourceController
                 "iat" => time(),
                 "exp" => time() + 60,
                 "uid" => $user['id'],
+                "nama" => $user['nama'],
                 "role" => $user['role_id'],
                 "email" => $user['email']
             );
@@ -50,6 +51,7 @@ class AuthApi extends ResourceController
             $response =  [
                 'message' => 'Login Berhasil',
                 'id' => $user['id'],
+                "nama" => $user['nama'],
                 'email' => $user['email'],
                 'role' => $user['role_id'],
                 'token' => $token
