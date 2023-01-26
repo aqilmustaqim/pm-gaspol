@@ -41,6 +41,7 @@ class AuthApi extends ResourceController
                 "iat" => time(),
                 "exp" => time() + 60,
                 "uid" => $user['id'],
+                "urole" => $user['role_id'],
                 "email" => $user['email']
             );
 
