@@ -40,9 +40,10 @@ $routes->get('/', 'Auth::index');
 //$routes->resource('usersapi');
 
 $routes->get('usersapi', 'UsersApi::index', ['filter' => 'auth']); //Filter Routersnya
+$routes->get('userapprove', 'UsersApi::userApprove', ['filter' => 'auth']); //Filter Routersnya
 $routes->get('usersapi/(:segment)', 'UsersApi::show/$1');
-$routes->post('usersapi', 'UsersApi::create');
-$routes->post('authapi', 'AuthApi::login');
+$routes->post('register', 'UsersApi::register');
+$routes->post('login', 'AuthApi::login');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

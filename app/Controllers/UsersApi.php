@@ -21,11 +21,15 @@ class UsersApi extends ResourceController
     public function index()
     {
 
-
-
-
         $model = new UsersModel();
-        $datauser['users'] = $model->findAll();
+        $datauser['users'] = $model->where('is_active', 1)->findAll();
+
+        return $this->respond($datauser);
+    }
+    public function userApprove()
+    {
+        $model = new UsersModel();
+        $datauser['users'] = $model->where('is_active', 0)->findAll();
 
         return $this->respond($datauser);
     }
@@ -41,7 +45,7 @@ class UsersApi extends ResourceController
         }
     }
 
-    public function create()
+    public function register()
     {
         $model = new UsersModel();
         $data = [
