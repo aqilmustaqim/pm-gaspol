@@ -5,6 +5,7 @@ namespace App\Controllers;
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\API\ResponseTrait;
 use App\Models\UsersModel;
+use App\Models\TeamModel;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use CodeIgniter\Model;
@@ -18,20 +19,46 @@ class UsersApi extends ResourceController
     protected $modelName = 'App\Models\UsersModel';
     protected $format = 'json';
 
+    //Show Member
     public function index()
     {
-
+        // Instansiasi Model
         $model = new UsersModel();
+
+        // Query CI Untuk Menampilkan Semua Member
         $datauser['users'] = $model->where('is_active', 1)->findAll();
 
         return $this->respond($datauser);
     }
+    //Show Approve Member
     public function userApprove()
     {
         $model = new UsersModel();
         $datauser['users'] = $model->where('is_active', 0)->findAll();
 
+        //
         return $this->respond($datauser);
+    }
+
+    public function approve($id = null)
+    {
+        $model = new UsersModel();
+
+        //Update Aktifnya
+        $data = [
+            'is_active' => 1
+        ];
+
+        $model->update($id, $data);
+        $response = [
+            'status' => '200',
+            'error' => null,
+            'message' => [
+                'success' => 'Data User Berhasil Di Aktivasi'
+            ]
+
+        ];
+        return $this->respondCreated($response);
     }
 
     public function show($id = null)
@@ -69,5 +96,24 @@ class UsersApi extends ResourceController
 
         ];
         return $this->respondCreated($response);
+    }
+
+    public function createTeam()
+    {
+        $model = new TeamModel();
+        $data = [
+            'team' => $this->request->getVar('team'),
+            'deskripsi_team' => $this->request->getVar('deskripsi')
+        ];
+        $model->insert($data);
+        $response = [
+            'status' => '201',
+            'error' => null,
+            'message' => [
+                'success' => 'Berhasil Menambahkan Data Team'
+            ]
+
+        ];
+        return $this->respondCreated($data, 'Created');
     }
 }

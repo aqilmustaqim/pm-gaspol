@@ -39,11 +39,23 @@ $routes->setAutoRoute(true);
 $routes->get('/', 'Auth::index');
 //$routes->resource('usersapi');
 
+//Routes API
+//1.Routes Show Member
 $routes->get('usersapi', 'UsersApi::index', ['filter' => 'auth']); //Filter Routersnya
+//2. Routes Show Approve Member
 $routes->get('userapprove', 'UsersApi::userApprove', ['filter' => 'auth']); //Filter Routersnya
+//3. Routes Approve Member
+$routes->post('approve/(:segment)', 'UsersApi::approve/$1');
+//4. Routes Show Member By ID
 $routes->get('usersapi/(:segment)', 'UsersApi::show/$1');
+//5. Routes Register Member
 $routes->post('register', 'UsersApi::register');
+//6. Routes Login Member
 $routes->post('login', 'AuthApi::login');
+//7. Routes Create Team
+$routes->post('createTeam', 'UsersApi::createTeam');
+//8. Routes Show Team
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing
@@ -60,3 +72,12 @@ $routes->post('login', 'AuthApi::login');
 if (is_file(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {
     require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
 }
+
+// Api Register ( andorid bisa register melaui api yagn dibuat dari backend) - Selesai
+// Api Show Approve
+// Api Approve ( Aktivasi ) -> belum dibuat apinya
+// Api Login
+// Api ShowRoom Member
+// Api ShowRoom Member By Id
+// Api Create Team
+// Api Show Team
