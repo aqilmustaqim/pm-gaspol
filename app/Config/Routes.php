@@ -55,6 +55,7 @@ $routes->post('login', 'AuthApi::login');
 //7. Routes Create Team
 $routes->post('createTeam', 'UsersApi::createTeam');
 //8. Routes Show Team
+$routes->post('listTeam', 'UsersApi::listTeam');
 
 /*
  * --------------------------------------------------------------------

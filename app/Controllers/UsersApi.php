@@ -116,4 +116,14 @@ class UsersApi extends ResourceController
         ];
         return $this->respondCreated($data, 'Created');
     }
+
+    public function listTeam()
+    {
+        $model = new TeamModel();
+
+        // Query CI Untuk Menampilkan Semua Team
+        $datateam['team'] = $model->findAll();
+
+        return $this->respond($datateam);
+    }
 }
