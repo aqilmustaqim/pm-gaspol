@@ -39,7 +39,7 @@ class AuthApi extends ResourceController
             //2. ISI PAYLOAD
             $payload = array(
                 "iat" => time(),
-                "exp" => time() + 60,
+                "exp" => time() + 259600,
                 "uid" => $user['id'],
                 "nama" => $user['nama'],
                 "role" => $user['role_id'],
