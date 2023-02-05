@@ -58,6 +58,8 @@ $routes->post('createTeam', 'UsersApi::createTeam', ['filter' => 'auth']);
 $routes->get('listTeam', 'UsersApi::listTeam', ['filter' => 'auth']);
 //9. Delete Team
 $routes->delete('deleteTeam/(:segment)', 'UsersApi::deleteTeam/$1', ['filter' => 'auth']);
+//10. Project
+$routes->get('project', 'UsersApi::project', ['filter' => 'auth']);
 /*
  * --------------------------------------------------------------------
  * Additional Routing
