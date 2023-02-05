@@ -148,4 +148,21 @@ class UsersApi extends ResourceController
 
         return $this->respond($datateam);
     }
+
+    public function deleteTeam($id = null)
+    {
+        $model = new TeamModel();
+        $data = $model->delete($id);
+
+        if ($data) {
+            $response = [
+                'status' => '200',
+                'error' => null,
+                'message' => [
+                    'success' => 'Berhasil Menghapus Team'
+                ]
+            ];
+            return $this->respondDeleted($response);
+        }
+    }
 }
