@@ -30,7 +30,7 @@ class UsersApi extends ResourceController
 
         $db      = \Config\Database::connect();
         $builder = $db->table('users');
-        $builder->select('nama,email,password,foto,role_id,posisi,is_active');
+        $builder->select('users.id,nama,email,password,foto,role_id,posisi,is_active');
         $builder->join('position', 'users.posisi_id = position.id');
         $builder->join('user_role', 'users.role_id = user_role.id');
         $builder->where('is_active', '1');
@@ -179,5 +179,27 @@ class UsersApi extends ResourceController
         $teamproject['project'] = $query->getResultArray();
 
         return $this->respond($teamproject);
+    }
+
+    public function update($id = null)
+    {
+        $model = new UsersModel();
+
+        //Update Aktifnya
+        $data = [
+            'id' => $id,
+            'nama' => $this->request->getVar('nama')
+        ];
+
+        $model->update($id, $data);
+        $response = [
+            'status' => '200',
+            'error' => null,
+            'message' => [
+                'success' => 'Data User Berhasil Di Update'
+            ]
+
+        ];
+        return $this->respondCreated($response);
     }
 }
