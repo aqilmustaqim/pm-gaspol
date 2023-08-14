@@ -19,12 +19,6 @@ class AuthApi extends ResourceController
     public function login()
     {
 
-        $rules = [
-            'email' => 'required|valid_email',
-            'password' => 'required'
-        ];
-        //validasi
-        if (!$this->validate($rules)) return $this->fail($this->validator->getErrors());
         $model = new UsersModel();
 
         $user = $model->where('email', $this->request->getVar('email'))->first();
