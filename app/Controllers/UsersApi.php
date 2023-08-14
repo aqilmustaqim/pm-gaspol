@@ -23,7 +23,7 @@ class UsersApi extends ResourceController
     public function index()
     {
         // Instansiasi Model
-        $model = new UsersModel();
+        //$model = new UsersModel();
 
         // Query CI Untuk Menampilkan Semua Member
         //$datauser['users'] = $model->where('is_active', 1)->findAll();
@@ -32,7 +32,7 @@ class UsersApi extends ResourceController
         $builder = $db->table('users');
         $builder->select('users.id,nama,email,password,foto,role_id,posisi,is_active');
         $builder->join('position', 'users.posisi_id = position.id');
-        $builder->join('user_role', 'users.role_id = user_role.id');
+        //$builder->join('user_role', 'users.role_id = user_role.id');
         $builder->where('is_active', '1');
         $query = $builder->get();
         $datauser['users'] = $query->getResultArray();
@@ -43,16 +43,15 @@ class UsersApi extends ResourceController
     public function userApprove()
     {
         $model = new UsersModel();
+
         $datauser['users'] = $model->where('is_active', 0)->findAll();
 
-        //
         return $this->respond($datauser);
     }
 
     public function approve($id = null)
     {
         $model = new UsersModel();
-
         //Update Aktifnya
         $data = [
             'is_active' => 1
@@ -132,19 +131,6 @@ class UsersApi extends ResourceController
 
         // Query CI Untuk Menampilkan Semua Team
         $datateam['team'] = $model->findAll();
-        // $db      = \Config\Database::connect();
-        // $builder = $db->table('team');
-        // $builder->select('id,team,deskripsi_team');
-        // $query = $builder->get();
-        // $datateam = $query->getResultArray();
-
-
-        // $db      = \Config\Database::connect();
-        // $builder = $db->table('project');
-        // $builder->selectCount('project.id');
-        // $builder->where('id_team', $datateam['id']);
-        // $query = $builder->get();
-        // $totalProjectTeam = $query->getResultArray();
 
         return $this->respond($datateam);
     }

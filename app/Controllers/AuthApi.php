@@ -19,7 +19,6 @@ class AuthApi extends ResourceController
     public function login()
     {
 
-
         $rules = [
             'email' => 'required|valid_email',
             'password' => 'required'
