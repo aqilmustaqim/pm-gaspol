@@ -10,6 +10,7 @@ use App\Models\ProjectModel;
 use App\Models\DetailProjectModel;
 use App\Models\TaskModel;
 use App\Models\DetailTaskModel;
+use App\Models\ListTaskModel;
 
 use function PHPSTORM_META\map;
 
@@ -23,6 +24,7 @@ class Project extends BaseController
     protected $detailProjectModel;
     protected $detailTaskModel;
     protected $taskModel;
+    protected $listTaskModel;
 
     public function __construct()
     {
@@ -33,6 +35,50 @@ class Project extends BaseController
         $this->detailProjectModel = new DetailProjectModel();
         $this->detailTaskModel = new DetailTaskModel();
         $this->taskModel = new TaskModel();
+        $this->listTaskModel = new ListTaskModel();
+    }
+
+    public function listProject()
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url());
+        }
+
+        if (session()->get('role_id') != 1) {
+            return redirect()->to(base_url('team'));
+        }
+
+        // Foto Member yang terlibat dalam project
+        $db      = \Config\Database::connect();
+        $builder = $db->table('detail_project');
+        $builder->select('id_users,nama,foto');
+        $builder->join('users', 'detail_project.id_users = users.id');
+        $builder->distinct();
+        $query = $builder->get();
+        $fotoMemberProject = $query->getResultArray();
+
+        // List All Project Join Team
+        $db      = \Config\Database::connect();
+        $builder = $db->table('project');
+        $builder->select('project.id as id,nama_project,deskripsi_project,tanggal_mulai,batas_waktu,status_project,team');
+        $builder->join('team', 'project.id_team = team.id');
+        $query = $builder->get();
+        $allproject = $query->getResultArray();
+
+        // Ambil Data Team
+        $team = $this->teamModel->findAll();
+
+
+
+        $data = [
+            'title' => 'PM Gaspol || List Project',
+            'bread' => 'List Project',
+            'fotoMemberProject' => $fotoMemberProject,
+            'project' => $allproject,
+            'team' => $team
+        ];
+
+        return view('project/listproject', $data);
     }
 
     public function addProject()
@@ -121,9 +167,36 @@ class Project extends BaseController
             $detailproject = $this->detailProjectModel->where('id_project', $id)->findAll();
             if ($detailproject) {
                 foreach ($detailproject as $dp) {
-                    $this->detailProjectModel->delete($detailproject['id']);
+                    $this->detailProjectModel->delete($dp['id']);
                 }
             }
+
+            // Hapus juga yang ada di task yang id projectnya sama
+            $task = $this->taskModel->where('id_project', $id)->findAll();
+            if ($task) {
+                foreach ($task as $t) {
+                    $this->taskModel->delete($t['id']);
+
+                    // Hapus juga yang ada di detail task yang id projectnya sama
+                    $detailtask = $this->detailTaskModel->where('id_task', $t['id'])->findAll();
+                    if ($detailtask) {
+                        foreach ($detailtask as $dt) {
+                            $this->detailTaskModel->delete($dt['id']);
+                        }
+                    }
+
+                    // Hapus Juga yang ada di list task ( Checklist )
+                    $listtask = $this->listTaskModel->where('id_task', $t['id'])->findAll();
+                    if ($listtask) {
+                        foreach ($listtask as $lt) {
+                            $this->listTaskModel->delete($lt['id']);
+                        }
+                    }
+                }
+            }
+
+
+
 
             //FlashDatanya
             session()->setFlashdata('team', 'Menghapus Data Project');

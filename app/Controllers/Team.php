@@ -6,6 +6,10 @@ use App\Models\TeamModel;
 use App\Models\UsersModel;
 use App\Models\DetailTeamModel;
 use App\Models\ProjectModel;
+use App\Models\DetailProjectModel;
+use App\Models\TaskModel;
+use App\Models\ListTaskModel;
+use App\Models\DetailTaskModel;
 
 use function PHPSTORM_META\map;
 
@@ -16,6 +20,11 @@ class Team extends BaseController
     protected $usersModel;
     protected $detailTeamModel;
     protected $projectModel;
+    protected $detailProjectModel;
+    protected $taskModel;
+    protected $detailTaskModel;
+    protected $listTaskModel;
+
 
     public function __construct()
     {
@@ -23,6 +32,10 @@ class Team extends BaseController
         $this->usersModel = new UsersModel();
         $this->detailTeamModel = new DetailTeamModel();
         $this->projectModel = new ProjectModel();
+        $this->detailProjectModel = new DetailProjectModel();
+        $this->taskModel = new TaskModel();
+        $this->detailTaskModel = new DetailTaskModel();
+        $this->listTaskModel = new ListTaskModel();
     }
 
     public function index()
@@ -79,6 +92,21 @@ class Team extends BaseController
         if ($this->teamModel->save([
             'team' => $this->request->getPost('namateam'),
             'deskripsi_team' => $this->request->getPost('deskripsiteam')
+        ])) {
+            echo 'berhasil';
+        }
+    }
+
+    public function editTeam()
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url());
+        }
+        // Update Databasenya
+        if ($this->teamModel->save([
+            'id' => $this->request->getPost('id'),
+            'team' => $this->request->getPost('namaTeam'),
+            'deskripsi_team' => $this->request->getPost('deskripsiTeam')
         ])) {
             echo 'berhasil';
         }
@@ -172,7 +200,50 @@ class Team extends BaseController
                     $this->detailTeamModel->delete($mt['id']);
                 }
             }
-            session()->setFlashdata('team', 'Menghapus Team Dan Member');
+
+            // Cek Juga Apakah Team nya udah ada project ? Kalau udah hapus project nya juga
+            $project = $this->projectModel->where('id_team', $idTeam)->findAll();
+            if ($project) {
+                // Hapus Semua Project yang teamnya sama
+                foreach ($project as $p) {
+                    $this->projectModel->delete($p['id']);
+
+                    // Cek apakah di project sudah ada member nya jika sudah ada hapus juga detail projectnya
+                    $detailproject = $this->detailProjectModel->where('id_project', $p['id'])->findAll();
+                    if ($detailproject) {
+                        foreach ($detailproject as $dp) {
+                            $this->detailProjectModel->delete($dp['id']);
+                        }
+                    }
+
+                    // cek juga apakah didalem project ada task jika ada hapus juga tasknya
+                    $task = $this->taskModel->where('id_project', $p['id'])->findAll();
+                    if ($task) {
+                        foreach ($task as $t) {
+                            $this->taskModel->delete($t['id']);
+
+
+                            // Cek Apakah didalam task ada detail task ?
+                            $detailtask = $this->detailTaskModel->where('id_task', $t['id'])->findAll();
+                            if ($detailtask) {
+                                foreach ($detailtask as $dt) {
+                                    $this->detailTaskModel->delete($dt['id']);
+                                }
+                            }
+
+                            // cek juga apakah ada list task nya
+                            $listtask = $this->listTaskModel->where('id_task', $t['id'])->findAll();
+                            if ($listtask) {
+                                foreach ($listtask as $lt) {
+                                    $this->listTaskModel->delete($lt['id']);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            session()->setFlashdata('team', 'Menghapus Team Dan Seluruh isinya');
             return redirect()->to(base_url('team'));
         }
     }

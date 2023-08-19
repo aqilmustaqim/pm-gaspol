@@ -41,11 +41,11 @@ $routes->get('/', 'Auth::index');
 
 //Routes API
 //1.Routes Show Member
-$routes->get('usersapi', 'UsersApi::index', ['filter' => 'auth']); //Filter Routersnya
+$routes->get('usersapi', 'UsersApi::index'); //['filter' => 'auth'] //Filter Routersnya
 //2. Routes Show Approve Member
-$routes->get('userapprove', 'UsersApi::userApprove', ['filter' => 'auth']); //Filter Routersnya
+$routes->get('userapprove', 'UsersApi::userApprove'); //Filter Routersnya
 //3. Routes Approve Member
-$routes->post('approve/(:segment)', 'UsersApi::approve/$1', ['filter' => 'auth']);
+$routes->post('approve/(:segment)', 'UsersApi::approve/$1');
 //4. Routes Show Member By ID
 //$routes->get('usersapi/(:segment)', 'UsersApi::show/$1', ['filter' => 'auth']);
 //5. Routes Register Member
@@ -53,15 +53,18 @@ $routes->post('register', 'UsersApi::register');
 //6. Routes Login Member
 $routes->post('login', 'AuthApi::login');
 //7. Routes Create Team
-$routes->post('createTeam', 'UsersApi::createTeam', ['filter' => 'auth']);
+$routes->post('createTeam', 'UsersApi::createTeam');
 //8. Routes Show Team
-$routes->get('listTeam', 'UsersApi::listTeam', ['filter' => 'auth']);
+$routes->get('listTeam', 'UsersApi::listTeam');
 //9. Delete Team
 //$routes->delete('deleteTeam/(:segment)', 'UsersApi::deleteTeam/$1', ['filter' => 'auth']);
 //10. Project
-$routes->get('project', 'UsersApi::project', ['filter' => 'auth']);
+$routes->get('project', 'UsersApi::project');
 // 11. Update User
-$routes->post('update/(:segment)', 'UsersApi::update/$1', ['filter' => 'auth']);
+$routes->post('update/(:segment)', 'UsersApi::update/$1');
+
+// 12. Show User
+$routes->get('show/(:segment)', 'UsersApi::show/$1');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

@@ -116,8 +116,9 @@
                                                     <i class="material-icons">more_vert</i>
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                    <button class="dropdown-item" data-toggle="modal" data-target="#member-add-modal<?= $dt['id']; ?>">Manage</button>
+                                                    <button class="dropdown-item" data-toggle="modal" data-target="#member-add-modal<?= $dt['id']; ?>">Manage Member</button>
                                                     <div class="dropdown-divider"></div>
+                                                    <button class="dropdown-item text-info" data-toggle="modal" data-target="#team-edit-modal<?= $dt['id']; ?>">Edit Team</button>
                                                     <a class="dropdown-item text-danger tombol-hapus" href="<?= base_url(); ?>/team/deleteTeam/<?= $dt['id']; ?>">Delete Team</a>
                                                 </div>
                                             </div>
@@ -191,6 +192,49 @@
                     </div>
                 </div>
                 <!-- End Modal Add Team -->
+
+                <?php foreach ($datateam as $dt) : ?>
+                    <div class="modal fade" id="team-edit-modal<?= $dt['id']; ?>" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit Team <button class="badge badge-dark"><?= $dt['team']; ?></button></h5>
+                                    <button type="button" class="close btn btn-round" data-dismiss="modal" aria-label="Close">
+                                        <i class="material-icons">close</i>
+                                    </button>
+                                </div>
+                                <!--end of modal head-->
+                                <ul class="nav nav-tabs nav-fill" role="tablist">
+
+                                </ul>
+                                <div class="modal-body">
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade show active" id="project-add-details" role="tabpanel">
+                                            <h6>General Details</h6>
+                                            <div class="form-group row align-items-center">
+                                                <label class="col-3">Name</label>
+                                                <input class="form-control col" type="text" placeholder="Team name" id="editNamaTeam" name="namaTeam" value="<?= $dt['team']; ?>" />
+                                                <input type="hidden" id="id" value="<?= $dt['id']; ?>">
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-3">Description</label>
+                                                <textarea class="form-control col" rows="3" placeholder="Team description" id="editDeskripsiTeam" name="deskripsiTeam"><?= $dt['deskripsi_team']; ?></textarea>
+                                            </div>
+                                            <hr>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!--end of modal body-->
+                                <div class="modal-footer">
+                                    <button role="button" class="btn btn-primary tombol-edit-team" type="submit">
+                                        Edit Team
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
 
                 <!-- Modal Add Member -->
                 <?php foreach ($datateam as $dt) : ?>

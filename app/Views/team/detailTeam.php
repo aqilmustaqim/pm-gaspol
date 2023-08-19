@@ -358,7 +358,6 @@
                                             </li>
                                         <?php endforeach; ?>
 
-
                                     </ul>
                                 </div>
                                 <div class="input-group input-group-round">

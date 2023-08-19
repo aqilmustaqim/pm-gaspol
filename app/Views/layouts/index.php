@@ -58,11 +58,7 @@
                                 <ul class="nav nav-small flex-column">
 
                                     <li class="nav-item">
-                                        <a class="nav-link" href="components-bootstrap.html">List Project</a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="components-pipeline.html">Add Project</a>
+                                        <a class="nav-link" href="<?= base_url('project/listProject'); ?>">List Project</a>
                                     </li>
 
                                 </ul>
@@ -551,6 +547,56 @@
                             }).then((result) => {
                                 if (result.isConfirmed) {
                                     window.location.href = "<?= base_url(); ?>/team/detailTeam/" + idTeam;
+                                }
+                            })
+                        }
+
+                    }
+                });
+
+
+            }
+        });
+
+        //Fungsi Edit Team
+        $('.tombol-edit-team').on('click', function() {
+            //Tangkap Semua Inputan
+            let id = $(this).closest('.modal-content').find('#id').val();
+            let namaTeam = $(this).closest('.modal-content').find('#editNamaTeam').val();
+            let deskripsiTeam = $(this).closest('.modal-content').find('#editDeskripsiTeam').val();
+
+            //Cek Biar Jangan Kosong
+            if (namaTeam == '') {
+                Swal.fire({
+                    title: 'Team',
+                    text: 'Nama Team Tidak Boleh Kosong !',
+                    icon: 'error'
+                });
+            } else if (deskripsiTeam == '') {
+                Swal.fire({
+                    title: 'Team',
+                    text: 'Deskripsi Team Tidak Boleh Kosong !',
+                    icon: 'error'
+                });
+            } else {
+                //Kalau Ada Isinya Semua Tampilin Ajax
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url(); ?>/team/editTeam",
+                    data: {
+                        namaTeam: namaTeam,
+                        deskripsiTeam: deskripsiTeam,
+                        id: id
+                    },
+                    success: function(data) {
+                        if (data == "berhasil") {
+                            Swal.fire({
+                                title: 'Edit Team',
+                                text: 'Berhasil Di Edit !',
+                                icon: 'success'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "<?= base_url(); ?>/team";
                                 }
                             })
                         }
