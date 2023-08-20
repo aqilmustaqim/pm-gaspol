@@ -139,3 +139,46 @@ function totalProjectTeam($idTeam)
 
     return $totalProjectTeam;
 }
+
+function totalTaskProject($idProject)
+{
+    $db = \Config\Database::connect();
+    $builder = $db->table('task');
+    $builder->selectCount('task.id');
+    $builder->where('id_project', $idProject);
+    $query = $builder->get();
+    $totalTaskProject = $query->getRowArray();
+
+    return $totalTaskProject;
+}
+
+function passedTaskProject($idProject)
+{
+    $db = \Config\Database::connect();
+    $builder = $db->table('task');
+    $builder->selectCount('task.id');
+    $builder->where('id_project', $idProject);
+    $builder->where('status_task', 1);
+    $query = $builder->get();
+    $passedTaskProject = $query->getRowArray();
+
+    if ($passedTaskProject['id'] == 0) {
+        return '0';
+    } else {
+        return $passedTaskProject['id'];
+    }
+}
+
+function hitungSelisihBatasWaktu($batasWaktu)
+{
+    $now = new DateTime(); // Waktu saat ini
+    $batas = new DateTime($batasWaktu);
+    if ($batas < $now) {
+        $message = "Deadline has passed";
+    } else {
+        $remainingDays = $now->diff($batas)->days;
+        $message = "Due " . $remainingDays . " days";
+    }
+
+    return $message;
+}

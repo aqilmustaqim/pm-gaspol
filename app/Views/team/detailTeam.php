@@ -101,16 +101,13 @@
                                                 <div class="card-meta d-flex justify-content-between">
                                                     <div class="d-flex align-items-center">
                                                         <i class="material-icons mr-1">playlist_add_check</i>
-                                                        <span class="text-small">6/10</span>
+                                                        <span class="text-small"><?= passedTaskProject($p['id']); ?>/<?= totalTaskProject($p['id'])['id']; ?></span>
                                                     </div>
                                                     <span class="text-small" data-filter-by="text">
-                                                        <?php
-                                                        $tanggal = new DateTime(date('Y-m-d'));
-                                                        $batas = new DateTime($p['batas_waktu']);
-                                                        $duedate = $batas->diff($tanggal);
 
-                                                        ?>
-                                                        Due <?= $duedate->d; ?> days
+                                                        <!-- Fungsi Menghitung Selisih Hari -->
+                                                        <?= hitungSelisihBatasWaktu($p['batas_waktu']); ?>
+
                                                     </span>
                                                 </div>
                                             </div>
@@ -154,16 +151,10 @@
                                                 <div class="card-meta d-flex justify-content-between">
                                                     <div class="d-flex align-items-center">
                                                         <i class="material-icons mr-1">playlist_add_check</i>
-                                                        <span class="text-small">6/10</span>
+                                                        <span class="text-small"><?= passedTaskProject($p['id']); ?>/<?= totalTaskProject($p['id'])['id']; ?></span>
                                                     </div>
                                                     <span class="text-small" data-filter-by="text">
-                                                        <?php
-                                                        $tanggal = new DateTime($pu['tanggal_mulai']);
-                                                        $batas = new DateTime($pu['batas_waktu']);
-                                                        $duedate = $batas->diff($tanggal);
-
-                                                        ?>
-                                                        Due <?= $duedate->d; ?> days
+                                                        <?= hitungSelisihBatasWaktu($pu['batas_waktu']); ?>
                                                     </span>
                                                 </div>
                                             </div>
@@ -292,7 +283,7 @@
                                             <label class="col-3">Name</label>
                                             <input class="form-control col" type="text" placeholder="Project name" id="editNamaProject" name="namaProject" value="<?= $p['nama_project']; ?>" />
                                             <input type="hidden" id="idTeam" value="<?= $idTeam; ?>">
-                                            <input type="hidden" id="id" value="<?= $p['id']; ?>">
+                                            <input type="hidden" id="idProject" value="<?= $p['id']; ?>">
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-3">Description</label>

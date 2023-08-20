@@ -492,12 +492,13 @@
         //Fungsi Edit Project
         $('.tombol-edit-project').on('click', function() {
             //Tangkap Semua Inputan
-            let id = $('#id').val();
-            let namaProject = $('#editNamaProject').val();
-            let deskripsiProject = $('#editDeskripsiProject').val();
-            let tanggalMulai = $('#editTanggalMulai').val();
-            let batasWaktu = $('#editBatasWaktu').val();
-            let idTeam = $('#idTeam').val();
+            // let id = $('#id').val();
+            let id = $(this).closest('.modal-content').find('#idProject').val();
+            let namaProject = $(this).closest('.modal-content').find('#editNamaProject').val();
+            let deskripsiProject = $(this).closest('.modal-content').find('#editDeskripsiProject').val();
+            let tanggalMulai = $(this).closest('.modal-content').find('#editTanggalMulai').val();
+            let batasWaktu = $(this).closest('.modal-content').find('#editBatasWaktu').val();
+            let idTeam = $(this).closest('.modal-content').find('#idTeam').val();
 
             //Cek Biar Jangan Kosong
             if (namaProject == '') {

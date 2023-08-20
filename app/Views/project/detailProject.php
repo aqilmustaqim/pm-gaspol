@@ -20,21 +20,25 @@
                     </ul>
                 </div>
                 <div>
+                    <?php
+                    $taskSelesai = passedTaskProject($project['id']);
+                    $totalTask = totalTaskProject($project['id'])['id'];
+
+                    $persentaseProgress = ($taskSelesai / $totalTask) * 100;
+                    $progressWarna = ($taskSelesai === 0) ? 'bg-danger' : 'bg-success';
+                    ?>
                     <div class="progress">
-                        <div class="progress-bar bg-success" style="width:25%;"></div>
+                        <div class="progress-bar <?= $progressWarna; ?>" style="width:<?= $persentaseProgress; ?>%;"></div>
                     </div>
                     <div class="d-flex justify-content-between text-small">
                         <div class="d-flex align-items-center">
                             <i class="material-icons">playlist_add_check</i>
-                            <span>3/<?= $totalTask; ?></span>
+                            <span><?= passedTaskProject($project['id']); ?>/<?= totalTaskProject($project['id'])['id']; ?></span>
                         </div>
-                        <?php
-                        $tanggal = new DateTime(date('Y-m-d'));
-                        $batas = new DateTime($project['batas_waktu']);
-                        $duedate = $batas->diff($tanggal);
 
-                        ?>
-                        <span>Due <?= $duedate->d; ?> days</span>
+                        <span>
+                            <?= hitungSelisihBatasWaktu($project['batas_waktu']); ?>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -95,13 +99,10 @@
                                                     <a href="<?= base_url(); ?>/task/detailTask/<?= $tm['id_task']; ?>">
                                                         <h6 data-filter-by="text"><?= $tm['nama_task']; ?></h6>
                                                     </a>
-                                                    <?php
-                                                    $tanggal = new DateTime(date('Y-m-d'));
-                                                    $batas = new DateTime($tm['batas_task']);
-                                                    $duedate = $batas->diff($tanggal);
 
-                                                    ?>
-                                                    <span class="text-small">Due <?= $duedate->d; ?> Days</span>
+                                                    <span class="text-small">
+                                                        belum ada
+                                                    </span>
                                                 </div>
                                                 <div class="card-meta">
                                                     <ul class="avatars">
@@ -118,7 +119,7 @@
                                                     </ul>
                                                     <div class="d-flex align-items-center">
                                                         <i class="material-icons">playlist_add_check</i>
-                                                        <span>3/4</span>
+                                                        <span><?= passedTaskProject($project['id']); ?>/<?= totalTaskProject($project['id'])['id']; ?></span>
                                                     </div>
                                                     <div class="dropdown card-options">
                                                         <button class="btn-options" type="button" id="task-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

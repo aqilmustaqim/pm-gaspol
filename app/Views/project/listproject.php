@@ -93,16 +93,10 @@
                                             <div class="card-meta d-flex justify-content-between">
                                                 <div class="d-flex align-items-center">
                                                     <i class="material-icons mr-1">playlist_add_check</i>
-                                                    <span class="text-small">6/10</span>
+                                                    <span class="text-small"><?= passedTaskProject($p['id']); ?>/<?= totalTaskProject($p['id'])['id']; ?></span>
                                                 </div>
                                                 <span class="text-small" data-filter-by="text">
-                                                    <?php
-                                                    $tanggal = new DateTime(date('Y-m-d'));
-                                                    $batas = new DateTime($p['batas_waktu']);
-                                                    $duedate = $batas->diff($tanggal);
-
-                                                    ?>
-                                                    Due <?= $duedate->d; ?> days
+                                                    <?= hitungSelisihBatasWaktu($p['batas_waktu']); ?>
                                                 </span>
                                             </div>
                                         </div>
