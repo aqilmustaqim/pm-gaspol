@@ -24,7 +24,11 @@
                     $taskSelesai = passedTaskProject($project['id']);
                     $totalTask = totalTaskProject($project['id'])['id'];
 
-                    $persentaseProgress = ($taskSelesai / $totalTask) * 100;
+                    if ($totalTask > 0) {
+                        $persentaseProgress = ($taskSelesai / $totalTask) * 100;
+                    } else {
+                        $persentaseProgress = 0; // Atau nilai lain yang sesuai jika $totalTask adalah nol
+                    }
                     $progressWarna = ($taskSelesai === 0) ? 'bg-danger' : 'bg-success';
                     ?>
                     <div class="progress">
@@ -100,9 +104,8 @@
                                                         <h6 data-filter-by="text"><?= $tm['nama_task']; ?></h6>
                                                     </a>
 
-                                                    <span class="text-small">
-                                                        belum ada
-                                                    </span>
+                                                    <span class="text-small"><?= hitungSelisihBatasWaktu($tm['batas_task']); ?></span>
+
                                                 </div>
                                                 <div class="card-meta">
                                                     <ul class="avatars">
@@ -119,7 +122,7 @@
                                                     </ul>
                                                     <div class="d-flex align-items-center">
                                                         <i class="material-icons">playlist_add_check</i>
-                                                        <span><?= passedTaskProject($project['id']); ?>/<?= totalTaskProject($project['id'])['id']; ?></span>
+                                                        <span><?= passedListTask($tm['id_task']); ?>/<?= totalListTask($tm['id_task'])['id']; ?></span>
                                                     </div>
                                                     <div class="dropdown card-options">
                                                         <button class="btn-options" type="button" id="task-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -137,21 +140,29 @@
                                 <?php } else { ?>
                                     <?php foreach ($task as $t) : ?>
                                         <div class="card card-task">
+                                            <?php
+                                            $taskSelesai = passedListTask($t['id']);
+                                            $totalTask = totalListTask($t['id'])['id'];
+
+                                            if ($totalTask > 0) {
+                                                $persentaseProgressTask = ($taskSelesai / $totalTask) * 100;
+                                            } else {
+                                                $persentaseProgressTask = 0; // Atau nilai lain yang sesuai jika $totalTask adalah nol
+                                            }
+                                            $progressWarnaTask = ($taskSelesai === 0) ? 'bg-danger' : 'bg-success';
+
+
+                                            ?>
                                             <div class="progress">
-                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 75%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar <?= $progressWarnaTask; ?>" role="progressbar" style="width: <?= $persentaseProgressTask; ?>%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                             <div class="card-body">
                                                 <div class="card-title">
                                                     <a href="<?= base_url(); ?>/task/detailTask/<?= $t['id']; ?>">
                                                         <h6 data-filter-by="text"><?= $t['nama_task']; ?></h6>
                                                     </a>
-                                                    <?php
-                                                    $tanggal = new DateTime(date('Y-m-d'));
-                                                    $batas = new DateTime($t['batas_task']);
-                                                    $duedate = $batas->diff($tanggal);
 
-                                                    ?>
-                                                    <span class="text-small">Due <?= $duedate->d; ?> Days</span>
+                                                    <span class="text-small"><?= hitungSelisihBatasWaktu($t['batas_task']); ?></span>
                                                 </div>
                                                 <div class="card-meta">
                                                     <ul class="avatars">
@@ -168,7 +179,7 @@
                                                     </ul>
                                                     <div class="d-flex align-items-center">
                                                         <i class="material-icons">playlist_add_check</i>
-                                                        <span>3/4</span>
+                                                        <span><?= passedListTask($t['id']); ?>/<?= totalListTask($t['id'])['id']; ?></span>
                                                     </div>
                                                     <div class="dropdown card-options">
                                                         <button class="btn-options" type="button" id="task-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

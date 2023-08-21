@@ -151,7 +151,7 @@
                                                 <div class="card-meta d-flex justify-content-between">
                                                     <div class="d-flex align-items-center">
                                                         <i class="material-icons mr-1">playlist_add_check</i>
-                                                        <span class="text-small"><?= passedTaskProject($p['id']); ?>/<?= totalTaskProject($p['id'])['id']; ?></span>
+                                                        <span class="text-small"><?= passedTaskProject($pu['id_project']); ?>/<?= totalTaskProject($pu['id_project'])['id']; ?></span>
                                                     </div>
                                                     <span class="text-small" data-filter-by="text">
                                                         <?= hitungSelisihBatasWaktu($pu['batas_waktu']); ?>

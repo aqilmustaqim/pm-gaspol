@@ -24,20 +24,29 @@
 
                 </div>
                 <div>
+                    <?php
+                    $taskSelesai = passedListTask($task['id']);
+                    $totalTask = totalListTask($task['id'])['id'];
+
+                    if ($totalTask > 0) {
+                        $persentaseProgressTask = ($taskSelesai / $totalTask) * 100;
+                    } else {
+                        $persentaseProgressTask = 0; // Atau nilai lain yang sesuai jika $totalTask adalah nol
+                    }
+                    $progressWarnaTask = ($taskSelesai === 0) ? 'bg-danger' : 'bg-success';
+
+
+                    ?>
                     <div class="progress">
-                        <div class="progress-bar bg-success" style="width:42%;"></div>
+                        <div class="progress-bar <?= $progressWarnaTask; ?>" style="width:<?= $persentaseProgressTask; ?>%;"></div>
                     </div>
                     <div class="d-flex justify-content-between text-small">
                         <div class="d-flex align-items-center">
                             <i class="material-icons">playlist_add_check</i>
-                            <span><?= $totalchecklistdone['id']; ?>/<?= $totalchecklist['id']; ?></span>
+                            <span><?= passedListTask($task['id']); ?>/<?= totalListTask($task['id'])['id']; ?></span>
                         </div>
-                        <?php
-                        $tanggal = new DateTime(date('Y-m-d'));
-                        $batas = new DateTime($task['batas_task']);
-                        $duedate = $batas->diff($tanggal);
-                        ?>
-                        <span>Due <?= $duedate->d; ?> days</span>
+
+                        <span><?= hitungSelisihBatasWaktu($task['batas_task']); ?></span>
                     </div>
                 </div>
             </div>

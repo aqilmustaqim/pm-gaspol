@@ -169,6 +169,35 @@ function passedTaskProject($idProject)
     }
 }
 
+function totalListTask($idTask)
+{
+    $db = \Config\Database::connect();
+    $builder = $db->table('list_task');
+    $builder->selectCount('list_task.id');
+    $builder->where('id_task', $idTask);
+    $query = $builder->get();
+    $totalListTask = $query->getRowArray();
+
+    return $totalListTask;
+}
+
+function passedListTask($idTask)
+{
+    $db = \Config\Database::connect();
+    $builder = $db->table('list_task');
+    $builder->selectCount('list_task.id');
+    $builder->where('id_task', $idTask);
+    $builder->where('status_list', 1);
+    $query = $builder->get();
+    $passedListTask = $query->getRowArray();
+
+    if ($passedListTask['id'] == 0) {
+        return '0';
+    } else {
+        return $passedListTask['id'];
+    }
+}
+
 function hitungSelisihBatasWaktu($batasWaktu)
 {
     $now = new DateTime(); // Waktu saat ini
