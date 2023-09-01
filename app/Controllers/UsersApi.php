@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\TaskModel;
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\API\ResponseTrait;
 use App\Models\UsersModel;
@@ -150,6 +151,49 @@ class UsersApi extends ResourceController
             ];
             return $this->respondDeleted($response);
         }
+    }
+
+
+    public function createTask()
+    {
+        $model = new TaskModel();
+
+        $data = [
+            'id_project' => $this->request->getVar('id_project'),
+            'nama_task' => $this->request->getVar('nama_task'),
+            'deskripsi_task' => $this->request->getVar('deskripsi_task'),
+            'tanggal_task' => $this->request->getVar('tanggal_task'),
+            'batas_task' => $this->request->getVar('batas_task'),
+            'status_task' => 0
+        ];
+
+        $model->insert($data);
+
+        $this->respondCreated($data, 'Berhasil Menambahkan Task');
+    }
+
+    public function updateTask($idTask)
+    {
+        $model = new TaskModel();
+
+        $data = [
+            'nama_task' => $this->request->getVar('nama_task'),
+            'deskripsi_task' => $this->request->getVar('deskripsi_task'),
+            'tanggal_task' => $this->request->getVar('tanggal_task'),
+            'batas_task' => $this->request->getVar('batas_task')
+        ];
+
+        $model->update($idTask, $data);
+
+        $response = [
+            'status' => '200',
+            'error' => null,
+            'message' => [
+                'success' => 'Task Berhasil Di Update'
+            ]
+
+        ];
+        return $this->respondCreated($response);
     }
 
     public function project()
