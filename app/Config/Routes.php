@@ -40,6 +40,7 @@ $routes->get('/', 'Auth::index');
 //$routes->resource('usersapi');
 
 //Routes API
+$routes->get('UsersApi', 'UsersApi::index', ['filter' => 'auth']); //['filter' => 'auth'] //Filter Routersnya
 //1.Routes Show Member
 $routes->get('usersapi', 'UsersApi::index', ['filter' => 'auth']); //['filter' => 'auth'] //Filter Routersnya
 //2. Routes Show Approve Member
