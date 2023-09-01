@@ -2,6 +2,8 @@
 
 namespace Config;
 
+use App\Controllers\UsersApi;
+
 // Create a new instance of our RouteCollection class.
 $routes = Services::routes();
 
@@ -72,6 +74,9 @@ $routes->post('createTask', 'UsersApi::createTask', ['filter' => 'auth']);
 
 // 14. Update Task
 $routes->post('updateTask/(:segment)', 'UsersApi::updateTask/$1');
+
+// 15. List Team By ID
+$routes->get('listTeamById/(:segment)', 'UsersApi::listTeamById/$1');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

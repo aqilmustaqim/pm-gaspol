@@ -136,6 +136,23 @@ class UsersApi extends ResourceController
         return $this->respond($datateam);
     }
 
+    public function listTeamById($idUsers = null)
+    {
+        $db      = \Config\Database::connect();
+        $builder = $db->table('detail_team');
+        $builder->select('team.id,team,deskripsi_team');
+        $builder->join('team', 'detail_team.id_team = team.id');
+        $builder->where('id_users', $idUsers);
+        $query = $builder->get();
+        $hasil = $listTeamById['teams'] = $query->getResultArray();
+
+        if ($hasil) {
+            return $this->respond($listTeamById);
+        } else {
+            return $this->failNotFound('User Belum Ada Team');
+        }
+    }
+
     public function deleteTeam($id = null)
     {
         $model = new TeamModel();
