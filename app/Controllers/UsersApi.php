@@ -228,6 +228,25 @@ class UsersApi extends ResourceController
         return $this->respond($teamproject);
     }
 
+    public function listProjectById($idUser)
+    {
+        //Mengambil Data Team Yang Ada Project
+        $db      = \Config\Database::connect();
+        $builder = $db->table('detail_project');
+        $builder->select('project.id,nama_project,deskripsi_project,tanggal_mulai,batas_waktu,status_project,team,id_team');
+        $builder->join('project', 'detail_project.id_project = project.id');
+        $builder->join('team', 'project.id_team = team.id');
+        $builder->where('id_users', $idUser);
+        $query = $builder->get();
+        $hasil = $listProjectById['project'] = $query->getResultArray();
+
+        if ($hasil) {
+            return $this->respond($listProjectById);
+        } else {
+            return $this->failNotFound('User Belum Ada Project');
+        }
+    }
+
     public function update($id = null)
     {
         $model = new UsersModel();
