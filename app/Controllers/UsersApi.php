@@ -193,24 +193,43 @@ class UsersApi extends ResourceController
     {
         $model = new TaskModel();
 
-        $data = [
-            'nama_task' => $this->request->getVar('nama_task'),
-            'deskripsi_task' => $this->request->getVar('deskripsi_task'),
-            'tanggal_task' => $this->request->getVar('tanggal_task'),
-            'batas_task' => $this->request->getVar('batas_task')
-        ];
+        // $data = [
+        //     'nama_task' => $this->request->getVar('nama_task'),
+        //     'deskripsi_task' => $this->request->getVar('deskripsi_task'),
+        //     'tanggal_task' => $this->request->getVar('tanggal_task'),
+        //     'batas_task' => $this->request->getVar('batas_task')
+        // ];
+        $data = $this->request->getJSON();
+        if ($model->update($idTask, $data)) {
+            $response = [
+                'status' => '200',
+                'error' => null,
+                'message' => [
+                    'success' => 'Task Berhasil Di Update'
+                ]
 
-        $model->update($idTask, $data);
+            ];
+            return $this->respondCreated($response);
+        }
+    }
 
-        $response = [
-            'status' => '200',
-            'error' => null,
-            'message' => [
-                'success' => 'Task Berhasil Di Update'
-            ]
+    public function listTaskById($idUser)
+    {
+        //Mengambil Data Task Yang Ada Project
+        $db      = \Config\Database::connect();
+        $builder = $db->table('detail_task');
+        $builder->select('task.id,nama_task,deskripsi_task,tanggal_task,batas_task,status_task,nama_project,id_project');
+        $builder->join('task', 'detail_task.id_task = task.id');
+        $builder->join('project', 'task.id_project = project.id');
+        $builder->where('id_users', $idUser);
+        $query = $builder->get();
+        $hasil = $listTaskById['task'] = $query->getResultArray();
 
-        ];
-        return $this->respondCreated($response);
+        if ($hasil) {
+            return $this->respond($listTaskById);
+        } else {
+            return $this->failNotFound('User Belum Ada Task');
+        }
     }
 
     public function project()
@@ -251,12 +270,13 @@ class UsersApi extends ResourceController
     {
         $model = new UsersModel();
 
-        //Update Aktifnya
-        $data = [
-            'id' => $id,
-            'nama' => $this->request->getVar('nama')
-        ];
 
+        $data = $this->request->getJSON();
+        //Update Aktifnya
+        // $data = [
+        //     'id' => $id,
+        //     'nama' => $this->request->getVar('nama')
+        // ];
         $model->update($id, $data);
         $response = [
             'status' => '200',
