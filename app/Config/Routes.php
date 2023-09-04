@@ -79,9 +79,10 @@ $routes->post('updateTask/(:segment)', 'UsersApi::updateTask/$1');
 $routes->get('listTeamById/(:segment)', 'UsersApi::listTeamById/$1');
 
 // 16. List Project By ID 
-$routes->get('listTaskById/(:segment)', 'UsersApi::listTaskById/$1');
+$routes->get('listProjectById/(:segment)', 'UsersApi::listProjectById/$1');
 
 // 17. List Task By ID
+$routes->get('listTaskById/(:segment)', 'UsersApi::listTaskById/$1');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

@@ -41,7 +41,7 @@
                         <div class="row content-list-head">
                             <div class="col-auto">
                                 <h3>Projects</h3>
-                                <?php if (session()->get('role_id') == 1) : ?>
+                                <?php if (session()->get('role_id') == 1 or session()->get('role_id') == 2) : ?>
                                     <button class="btn btn-round" data-toggle="modal" data-target="#project-add-modal">
                                         <i class="material-icons">add</i>
                                     </button>
@@ -60,7 +60,7 @@
                         </div>
                         <!--end of content list head-->
                         <div class="content-list-body row">
-                            <?php if (session()->get('role_id') == 1) { ?>
+                            <?php if (session()->get('role_id') == 1 or session()->get('role_id') == 2) { ?>
                                 <?php foreach ($project as $p) : ?>
                                     <div class="col-lg-6">
                                         <div class="card card-project">
