@@ -128,6 +128,18 @@ function jumlahMemberTeam($idTeam)
     return $jumlahMemberTeam;
 }
 
+function jumlahMemberProject($idProject)
+{
+    $db      = \Config\Database::connect();
+    $builder = $db->table('detail_project');
+    $builder->selectCount('detail_project.id');
+    $builder->where('id_project', $idProject);
+    $query = $builder->get();
+    $jumlahMemberProject = $query->getRowArray();
+
+    return $jumlahMemberProject;
+}
+
 function totalProjectTeam($idTeam)
 {
     $db      = \Config\Database::connect();

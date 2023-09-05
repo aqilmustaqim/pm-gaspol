@@ -288,4 +288,140 @@ class UsersApi extends ResourceController
         ];
         return $this->respondCreated($response);
     }
+
+    public function detailTeam($idUser)
+    {
+
+        // Cek User nya
+        $model = new UsersModel();
+        $cekUser = $model->where('id', $idUser)->first();
+
+        if ($cekUser['role_id'] == 3) {
+
+            $db = \Config\Database::connect();
+            $builder = $db->table('detail_team');
+            $builder->select('team.id as id,team,deskripsi_team');
+            $builder->join('team', 'detail_team.id_team = team.id');
+            $builder->where('id_users', $idUser);
+            $query = $builder->get();
+            $hasil = $query->getResultArray();
+
+            foreach ($hasil as &$team) {
+
+                // SEGMENT TEAM ( TOTAL PROJECT DAN TOTAL MEMBER )
+                helper('my_helper');
+                $totalproject = totalProjectTeam($team['id'])['id'];
+                $jumlahMemberTeam = jumlahMemberTeam($team['id'])['id'];
+                $team["total_project"] = $totalproject;
+                $team["total_member"] = $jumlahMemberTeam;
+
+
+
+                // SEGMENT LIST_PROJECT
+                $team["list_project"] = [];
+                $db = \Config\Database::connect();
+                $builder = $db->table('project');
+                $builder->select('project.id as id_project,nama_project, deskripsi_project, tanggal_mulai, batas_waktu, status_project');
+                $builder->where('id_team', $team['id']);
+                $query = $builder->get();
+                $project = $query->getResultArray();
+
+                foreach ($project as &$projects) {
+
+                    $totalTaskProject = totalTaskProject($projects['id_project'])['id'];
+                    $passedTaskProject = passedTaskProject($projects['id_project']);
+                    $totalMemberProject = jumlahMemberProject($projects['id_project'])['id'];
+                    $projects["total_task"] = $totalTaskProject;
+                    $projects["complete_task"] = $passedTaskProject;
+                    $projects["total_member"] = $totalMemberProject;
+                }
+                $team["list_project"][] = $project;
+
+
+                // SEGMENT LIST MEMBER
+                $team["list_member"] = [];
+                //Query Untuk Mengambil Foto Member Team
+                $db      = \Config\Database::connect();
+                $builder = $db->table('detail_team');
+                $builder->select('users.id as id,nama,posisi');
+                $builder->join('users', 'detail_team.id_users = users.id');
+                // $builder->join('user_role', 'users.role_id = user_role.id');
+                $builder->join('user_role', 'users.role_id = user_role.id');
+                $builder->join('position', 'users.posisi_id = position.id');
+                $builder->where('id_team', $team['id']);
+                $query = $builder->get();
+                $listMember = $query->getResultArray();
+                $team["list_member"][] = $listMember;
+            }
+            if ($hasil) {
+                $detailTeam['teams'] = $hasil;
+                return $this->respond($detailTeam);
+            } else {
+                return $this->failNotFound('User Belum Ada Team');
+            }
+        } else {
+            // Selain Member Bisa Ambil Semua Data
+            $db = \Config\Database::connect();
+            $builder = $db->table('detail_team');
+            $builder->select('team.id as id,team,deskripsi_team');
+            $builder->join('team', 'detail_team.id_team = team.id');
+            $builder->distinct();
+            $query = $builder->get();
+            $hasil = $query->getResultArray();
+
+            foreach ($hasil as &$team) {
+
+                // SEGMENT TEAM ( TOTAL PROJECT DAN TOTAL MEMBER )
+                helper('my_helper');
+                $totalproject = totalProjectTeam($team['id'])['id'];
+                $jumlahMemberTeam = jumlahMemberTeam($team['id'])['id'];
+                $team["total_project"] = $totalproject;
+                $team["total_member"] = $jumlahMemberTeam;
+
+
+
+                // SEGMENT LIST_PROJECT
+                $team["list_project"] = [];
+                $db = \Config\Database::connect();
+                $builder = $db->table('project');
+                $builder->select('project.id as id_project,nama_project, deskripsi_project, tanggal_mulai, batas_waktu, status_project');
+                $builder->where('id_team', $team['id']);
+                $query = $builder->get();
+                $project = $query->getResultArray();
+
+                foreach ($project as &$projects) {
+
+                    $totalTaskProject = totalTaskProject($projects['id_project'])['id'];
+                    $passedTaskProject = passedTaskProject($projects['id_project']);
+                    $totalMemberProject = jumlahMemberProject($projects['id_project'])['id'];
+                    $projects["total_task"] = $totalTaskProject;
+                    $projects["complete_task"] = $passedTaskProject;
+                    $projects["total_member"] = $totalMemberProject;
+                }
+                $team["list_project"][] = $project;
+
+
+                // SEGMENT LIST MEMBER
+                $team["list_member"] = [];
+                //Query Untuk Mengambil Foto Member Team
+                $db      = \Config\Database::connect();
+                $builder = $db->table('detail_team');
+                $builder->select('users.id as id,nama,posisi');
+                $builder->join('users', 'detail_team.id_users = users.id');
+                // $builder->join('user_role', 'users.role_id = user_role.id');
+                $builder->join('user_role', 'users.role_id = user_role.id');
+                $builder->join('position', 'users.posisi_id = position.id');
+                $builder->where('id_team', $team['id']);
+                $query = $builder->get();
+                $listMember = $query->getResultArray();
+                $team["list_member"][] = $listMember;
+            }
+            if ($hasil) {
+                $detailTeam['teams'] = $hasil;
+                return $this->respond($detailTeam);
+            } else {
+                return $this->failNotFound('User Belum Ada Team');
+            }
+        }
+    }
 }

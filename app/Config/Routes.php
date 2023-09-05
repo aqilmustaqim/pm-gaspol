@@ -83,6 +83,9 @@ $routes->get('listProjectById/(:segment)', 'UsersApi::listProjectById/$1');
 
 // 17. List Task By ID
 $routes->get('listTaskById/(:segment)', 'UsersApi::listTaskById/$1');
+
+// 18. DetailTeamLengkapByID
+$routes->get('detailTeam/(:segment)', 'UsersApi::detailTeam/$1');
 /*
  * --------------------------------------------------------------------
  * Additional Routing
