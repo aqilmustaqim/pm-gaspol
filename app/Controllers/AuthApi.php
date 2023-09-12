@@ -27,7 +27,15 @@ class AuthApi extends ResourceController
         if (!$this->validate($rules)) return $this->fail($this->validator->getErrors());
         $model = new UsersModel();
 
-        $user = $model->where('email', $this->request->getVar('email'))->first();
+        //$user = $model->where('email', $this->request->getVar('email'))->first();
+        $db      = \Config\Database::connect();
+        $builder = $db->table('users');
+        $builder->select('users.id,nama,email,password,foto,role_id,posisi,is_active');
+        $builder->join('position', 'users.posisi_id = position.id');
+        //$builder->join('user_role', 'users.role_id = user_role.id');
+        $builder->where('email', $this->request->getVar('email'));
+        $query = $builder->get();
+        $user = $query->getRowArray();
         if (!$user) return $this->failNotFound('Email Tidak DiTemukan');
 
 
@@ -53,7 +61,7 @@ class AuthApi extends ResourceController
                 "nama" => $user['nama'],
                 'email' => $user['email'],
                 'role' => $user['role_id'],
-                'posisi' => $user['posisi_id'],
+                'posisi' => $user['posisi'],
                 'token' => $token
             ];
             return $this->respond($response);

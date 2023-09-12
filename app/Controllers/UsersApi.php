@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Models\ListTaskModel;
+use App\Models\ProjectModel;
 use App\Models\TaskModel;
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\API\ResponseTrait;
@@ -247,6 +249,31 @@ class UsersApi extends ResourceController
         return $this->respond($teamproject);
     }
 
+    public function createProject()
+    {
+        $model = new ProjectModel();
+
+        $data = [
+            'id_team' => $this->request->getVar('id_team'),
+            'nama_project' => $this->request->getVar('nama_project'),
+            'deskripsi_project' => $this->request->getVar('deskripsi_project'),
+            'tanggal_mulai' => $this->request->getVar('tanggal_mulai'),
+            'batas_waktu' => $this->request->getVar('batas_waktu'),
+            'status_project' => 0
+        ];
+
+        if ($model->insert($data)) {
+            $response = [
+                'status' => '201',
+                'error' => null,
+                'message' => [
+                    'success' => 'Project Berhasil DiTambahkan'
+                ]
+            ];
+            return $this->respondCreated($response);
+        }
+    }
+
     public function listProjectById($idUser)
     {
         //Mengambil Data Team Yang Ada Project
@@ -334,6 +361,45 @@ class UsersApi extends ResourceController
                     $projects["total_task"] = $totalTaskProject;
                     $projects["complete_task"] = $passedTaskProject;
                     $projects["total_member"] = $totalMemberProject;
+
+                    // SEGMENT TASK
+                    $projects["task"] = [];
+                    $db = \Config\Database::connect();
+                    $builder = $db->table('task');
+                    $builder->select('task.id as id_task,nama_task,deskripsi_task,tanggal_task,batas_task,status_task');
+                    $builder->where('id_project', $projects['id_project']);
+                    $query = $builder->get();
+                    $task = $query->getResultArray();
+
+                    foreach ($task as &$tasks) {
+                        // SEGMENT TASK ( BATAS WAKTU )
+                        helper('my_helper');
+                        $batasTask = hitungSelisihBatasWaktu($tasks['batas_task']);
+                        $tasks['due_date'] = $batasTask;
+
+                        // SEGMENT TASK ( TOTAL CHECKLIST )
+                        $totalListTask = totalListTask($tasks['id_task'])['id'];
+                        $passedListTask = passedListTask($tasks['id_task']);
+                        $tasks['total_list_task'] = $totalListTask;
+                        $tasks['passed_list_task'] = $passedListTask;
+
+                        // SEGMENT TASK ( TOTAL MEMBER )
+                        $totalMemberTask = jumlahMemberTask($tasks['id_task'])['id'];
+                        $tasks['total_member_task'] = $totalMemberTask;
+
+
+                        // SEGMENT CHECKLIST TASK
+                        $tasks["checklist_task"] = [];
+                        $db = \Config\Database::connect();
+                        $builder = $db->table('list_task');
+                        $builder->select('list_task.id as id,list,status_list');
+                        $builder->where('id_task', $tasks['id_task']);
+                        $query = $builder->get();
+                        $checklist = $query->getResultArray();
+
+                        $tasks["checklist_task"][] = $checklist;
+                    }
+                    $projects["task"][] = $task;
                 }
                 $team["list_project"][] = $project;
 
@@ -521,6 +587,45 @@ class UsersApi extends ResourceController
             } else {
                 return $this->failNotFound('User Belum Ada Task');
             }
+        }
+    }
+
+    public function createChecklist()
+    {
+        $model = new ListTaskModel();
+
+        $data = [
+            'id_task' => $this->request->getVar('id_task'),
+            'list' => $this->request->getVar('list'),
+            'status_list' => 0
+        ];
+        //$data = $this->request->getJSON();
+
+        if ($model->insert($data)) {
+            $response = [
+                'status' => '201',
+                'error' => null,
+                'message' => [
+                    'success' => 'Checklist Berhasil DiTambahkan'
+                ]
+            ];
+            return $this->respondCreated($response);
+        }
+    }
+
+    public function updateChecklist($id = null)
+    {
+        $model = new ListTaskModel();
+        $data = $this->request->getJSON();
+        if ($model->update($id, $data)) {
+            $response = [
+                'status' => '200',
+                'error' => null,
+                'message' => [
+                    'success' => 'Checklist Berhasil Di Update'
+                ]
+            ];
+            return $this->respondCreated($response);
         }
     }
 }

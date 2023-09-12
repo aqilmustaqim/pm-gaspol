@@ -88,7 +88,16 @@ $routes->get('listTaskById/(:segment)', 'UsersApi::listTaskById/$1', ['filter' =
 $routes->get('detailTeam/(:segment)', 'UsersApi::detailTeam/$1', ['filter' => 'auth']);
 
 // 19. DetailTaskLengkaByID
-$routes->get('detailTask/(:segment)', 'UsersApi::detailTask/$1');
+$routes->get('detailTask/(:segment)', 'UsersApi::detailTask/$1', ['filter' => 'auth']);
+
+// 20. Update Checklist
+$routes->post('updateChecklist/(:segment)', 'UsersApi::updateChecklist/$1', ['filter' => 'auth']);
+
+// 21. Create Checklist
+$routes->post('createChecklist', 'UsersApi::createChecklist/$1', ['filter' => 'auth']);
+
+// 22. Create Project
+$routes->post('createProject', 'UsersApi::createProject');
 /*
  * --------------------------------------------------------------------
  * Additional Routing
