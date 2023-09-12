@@ -463,6 +463,45 @@ class UsersApi extends ResourceController
                     $projects["total_task"] = $totalTaskProject;
                     $projects["complete_task"] = $passedTaskProject;
                     $projects["total_member"] = $totalMemberProject;
+
+                    // SEGMENT TASK
+                    $projects["task"] = [];
+                    $db = \Config\Database::connect();
+                    $builder = $db->table('task');
+                    $builder->select('task.id as id_task,nama_task,deskripsi_task,tanggal_task,batas_task,status_task');
+                    $builder->where('id_project', $projects['id_project']);
+                    $query = $builder->get();
+                    $task = $query->getResultArray();
+
+                    foreach ($task as &$tasks) {
+                        // SEGMENT TASK ( BATAS WAKTU )
+                        helper('my_helper');
+                        $batasTask = hitungSelisihBatasWaktu($tasks['batas_task']);
+                        $tasks['due_date'] = $batasTask;
+
+                        // SEGMENT TASK ( TOTAL CHECKLIST )
+                        $totalListTask = totalListTask($tasks['id_task'])['id'];
+                        $passedListTask = passedListTask($tasks['id_task']);
+                        $tasks['total_list_task'] = $totalListTask;
+                        $tasks['passed_list_task'] = $passedListTask;
+
+                        // SEGMENT TASK ( TOTAL MEMBER )
+                        $totalMemberTask = jumlahMemberTask($tasks['id_task'])['id'];
+                        $tasks['total_member_task'] = $totalMemberTask;
+
+
+                        // SEGMENT CHECKLIST TASK
+                        $tasks["checklist_task"] = [];
+                        $db = \Config\Database::connect();
+                        $builder = $db->table('list_task');
+                        $builder->select('list_task.id as id,list,status_list');
+                        $builder->where('id_task', $tasks['id_task']);
+                        $query = $builder->get();
+                        $checklist = $query->getResultArray();
+
+                        $tasks["checklist_task"][] = $checklist;
+                    }
+                    $projects["task"][] = $task;
                 }
                 $team["list_project"][] = $project;
 
