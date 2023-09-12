@@ -53,6 +53,7 @@ class AuthApi extends ResourceController
                 "nama" => $user['nama'],
                 'email' => $user['email'],
                 'role' => $user['role_id'],
+                'posisi' => $user['posisi_id'],
                 'token' => $token
             ];
             return $this->respond($response);

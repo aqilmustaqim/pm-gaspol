@@ -210,6 +210,18 @@ function passedListTask($idTask)
     }
 }
 
+function jumlahMemberTask($idTask)
+{
+    $db      = \Config\Database::connect();
+    $builder = $db->table('detail_task');
+    $builder->selectCount('detail_task.id');
+    $builder->where('id_task', $idTask);
+    $query = $builder->get();
+    $jumlahMemberTask = $query->getRowArray();
+
+    return $jumlahMemberTask;
+}
+
 function hitungSelisihBatasWaktu($batasWaktu)
 {
     $now = new DateTime(); // Waktu saat ini

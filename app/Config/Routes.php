@@ -56,7 +56,7 @@ $routes->post('register', 'UsersApi::register');
 //6. Routes Login Member
 $routes->post('login', 'AuthApi::login');
 //7. Routes Create Team
-$routes->post('createTeam', 'UsersApi::createTeam');
+$routes->post('createTeam', 'UsersApi::createTeam', ['filter' => 'auth']);
 //8. Routes Show Team
 $routes->get('listTeam', 'UsersApi::listTeam', ['filter' => 'auth']);
 //9. Delete Team
@@ -64,7 +64,7 @@ $routes->get('listTeam', 'UsersApi::listTeam', ['filter' => 'auth']);
 //10. Project
 $routes->get('project', 'UsersApi::project', ['filter' => 'auth']);
 // 11. Update User
-$routes->post('update/(:segment)', 'UsersApi::update/$1');
+$routes->post('update/(:segment)', 'UsersApi::update/$1', ['filter' => 'auth']);
 
 // 12. Show User
 $routes->get('show/(:segment)', 'UsersApi::show/$1', ['filter' => 'auth']);
@@ -73,19 +73,22 @@ $routes->get('show/(:segment)', 'UsersApi::show/$1', ['filter' => 'auth']);
 $routes->post('createTask', 'UsersApi::createTask', ['filter' => 'auth']);
 
 // 14. Update Task
-$routes->post('updateTask/(:segment)', 'UsersApi::updateTask/$1');
+$routes->post('updateTask/(:segment)', 'UsersApi::updateTask/$1', ['filter' => 'auth']);
 
 // 15. List Team By ID
-$routes->get('listTeamById/(:segment)', 'UsersApi::listTeamById/$1');
+$routes->get('listTeamById/(:segment)', 'UsersApi::listTeamById/$1', ['filter' => 'auth']);
 
 // 16. List Project By ID 
-$routes->get('listProjectById/(:segment)', 'UsersApi::listProjectById/$1');
+$routes->get('listProjectById/(:segment)', 'UsersApi::listProjectById/$1', ['filter' => 'auth']);
 
 // 17. List Task By ID
-$routes->get('listTaskById/(:segment)', 'UsersApi::listTaskById/$1');
+$routes->get('listTaskById/(:segment)', 'UsersApi::listTaskById/$1', ['filter' => 'auth']);
 
 // 18. DetailTeamLengkapByID
-$routes->get('detailTeam/(:segment)', 'UsersApi::detailTeam/$1');
+$routes->get('detailTeam/(:segment)', 'UsersApi::detailTeam/$1', ['filter' => 'auth']);
+
+// 19. DetailTaskLengkaByID
+$routes->get('detailTask/(:segment)', 'UsersApi::detailTask/$1');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

@@ -424,4 +424,58 @@ class UsersApi extends ResourceController
             }
         }
     }
+
+    public function detailTask($idUser)
+    {
+        // Cek User
+        $model = new UsersModel();
+        $cekUser = $model->where('id', $idUser)->first();
+
+        if ($cekUser['role_id'] == 3) {
+            $db = \Config\Database::connect();
+            $builder = $db->table('detail_task');
+            $builder->select('task.id as id,nama_task,deskripsi_task,tanggal_task,batas_task,status_task');
+            $builder->join('task', 'detail_task.id_task = task.id');
+            $builder->where('id_users', $idUser);
+            $query = $builder->get();
+            $hasil = $query->getResultArray();
+
+            foreach ($hasil as &$task) {
+
+                // SEGMENT TASK ( BATAS WAKTU )
+                helper('my_helper');
+                $batasTask = hitungSelisihBatasWaktu($task['batas_task']);
+                $task['due_date'] = $batasTask;
+
+                // SEGMENT TASK ( TOTAL CHECKLIST )
+                $totalListTask = totalListTask($task['id'])['id'];
+                $passedListTask = passedListTask($task['id']);
+                $task['total_list_task'] = $totalListTask;
+                $task['passed_list_task'] = $passedListTask;
+
+                // SEGMENT TASK ( TOTAL MEMBER )
+                $totalMemberTask = jumlahMemberTask($task['id'])['id'];
+                $task['total_member_task'] = $totalMemberTask;
+
+
+                // SEGMENT CHECKLIST TASK
+                $task["checklist_task"] = [];
+                $db = \Config\Database::connect();
+                $builder = $db->table('list_task');
+                $builder->select('list_task.id as id,list,status_list');
+                $builder->where('id_task', $task['id']);
+                $query = $builder->get();
+                $checklist = $query->getResultArray();
+
+                $task["checklist_task"][] = $checklist;
+            }
+
+            if ($hasil) {
+                $detailTask['task'] = $hasil;
+                return $this->respond($detailTask);
+            } else {
+                return $this->failNotFound('User Belum Ada Task');
+            }
+        }
+    }
 }
