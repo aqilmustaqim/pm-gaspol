@@ -539,8 +539,9 @@ class UsersApi extends ResourceController
         if ($cekUser['role_id'] == 3) {
             $db = \Config\Database::connect();
             $builder = $db->table('detail_task');
-            $builder->select('task.id as id,nama_task,deskripsi_task,tanggal_task,batas_task,status_task');
+            $builder->select('task.id as id,nama_task,deskripsi_task,tanggal_task,batas_task,status_task,id_team');
             $builder->join('task', 'detail_task.id_task = task.id');
+            $builder->join('project', 'task.id_project = project.id');
             $builder->where('id_users', $idUser);
             $query = $builder->get();
             $hasil = $query->getResultArray();
