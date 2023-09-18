@@ -1,5 +1,28 @@
 <?php
 
+use App\Models\ListTaskModel;
+use App\Models\ProjectModel;
+use App\Models\TaskModel;
+
+function generate_breadcrumb($breadcrumb_data = [])
+{
+    $breadcrumb = '<nav aria-label="breadcrumb">';
+    $breadcrumb .= '<ol class="breadcrumb">';
+
+    foreach ($breadcrumb_data as $label => $url) {
+        if (empty($url)) {
+            $breadcrumb .= '<li class="breadcrumb-item active">' . $label . '</li>';
+        } else {
+            $breadcrumb .= '<li class="breadcrumb-item"><a href="' . $url . '">' . $label . '</a></li>';
+        }
+    }
+
+    $breadcrumb .= '</ol>';
+    $breadcrumb .= '</nav>';
+
+    return $breadcrumb;
+}
+
 function check_member($idteam, $iduser)
 {
     $db      = \Config\Database::connect();
@@ -209,6 +232,67 @@ function passedListTask($idTask)
         return $passedListTask['id'];
     }
 }
+
+function updateStatusTask($idTask)
+{
+    $listTaskModel = new ListTaskModel();
+    $taskModel = new TaskModel();
+
+    $countStatusListOne = $listTaskModel->where('status_list', 1)->where('id_task', $idTask)->countAllResults();
+    $totalCount = $listTaskModel->where('id_task', $idTask)->countAllResults();
+
+    if ($countStatusListOne) {
+        if ($countStatusListOne === $totalCount) {
+            // Jika semua status_list adalah 1, maka update status_task di tabel task
+            $taskModel->save([
+                'id' => $idTask,
+                'status_task' => 1
+            ]);
+        } else {
+            $taskModel->save([
+                'id' => $idTask,
+                'status_task' => 0
+            ]);
+        }
+    }
+    // return $idTask;
+}
+
+function updateStatusProject($idProject)
+{
+    // Konsep Nya
+    //1. Cek Di Checklist Kalau Ada Yang Status nya 1 Maka Project Nya on progress
+
+    $listTaskModel = new ListTaskModel();
+    $listProject = new ProjectModel();
+
+    $db = \Config\Database::connect();
+    $builder = $db->table('list_task');
+    $builder->select('id_project');
+    $builder->join('task', 'list_task.id_task = task.id');
+    $builder->where('status_list', 1);
+    $builder->where('id_project', $idProject);
+    $countStatusListOne = $builder->countAllResults();
+    // $countStatusListOne = $listTaskModel->where('status_list', 1)->where('id_task', $idTask)->countAllResults();
+
+    if ($countStatusListOne) {
+        if ($countStatusListOne > 0) {
+
+            // Update Project Nya yang berkaitan dengan tasknya
+            $listProject->save([
+                'id' => $idProject,
+                'status_project' => 1
+            ]);
+        }
+    } else {
+        $listProject->save([
+            'id' => $idProject,
+            'status_project' => 0
+        ]);
+    }
+}
+
+
 
 function jumlahMemberTask($idTask)
 {

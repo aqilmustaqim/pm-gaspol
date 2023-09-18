@@ -70,9 +70,14 @@ class Team extends BaseController
         $dataTeamUser = $query->getResultArray();
 
         $datausers = $this->usersModel->where('is_active', '1')->findAll();
+
+        // Set breadcrumb data
+        $breadcrumb = [
+            'Team' => base_url('team')
+        ];
         $data = [
             'title' => 'PM Gaspol || Team',
-            'bread' => 'Team',
+            'bread' => generate_breadcrumb($breadcrumb),
             'datateam' => $datateam,
             'datausers' => $datausers,
             'datateamuser' => $dataTeamUser,
@@ -315,9 +320,14 @@ class Team extends BaseController
         $query = $builder->get();
         $fotoMemberTeam = $query->getResultArray();
 
+        $breadcrumb = [
+            'Team' => base_url('team'),
+            'Detail Team' => base_url("team/detailTeam/" . $idTeam)
+        ];
+
         $data = [
             'title' => 'PM Gaspol || Detail Team',
-            'bread' => 'Detail Team',
+            'bread' => generate_breadcrumb($breadcrumb),
             'detailTeam' => $detailteam,
             'fotoMemberTeam' => $fotoMemberTeam,
             'idTeam' => $idTeam,

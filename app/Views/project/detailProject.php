@@ -2,6 +2,7 @@
 <?= $this->section('content'); ?>
 <div class="container">
     <div class="project" data-project="<?= session()->getFlashdata('project'); ?>"></div>
+
     <div class="row justify-content-center">
         <div class="col-lg-11 col-xl-10">
             <div class="page-header">
@@ -95,8 +96,21 @@
                                     <!-- CARD TASK UNTUK MEMBER -->
                                     <?php foreach ($taskmember as $tm) : ?>
                                         <div class="card card-task">
+                                            <?php
+                                            $taskSelesai = passedListTask($tm['id_task']);
+                                            $totalTask = totalListTask($tm['id_task'])['id'];
+
+                                            if ($totalTask > 0) {
+                                                $persentaseProgressTask = ($taskSelesai / $totalTask) * 100;
+                                            } else {
+                                                $persentaseProgressTask = 0; // Atau nilai lain yang sesuai jika $totalTask adalah nol
+                                            }
+                                            $progressWarnaTask = ($taskSelesai === 0) ? 'bg-danger' : 'bg-success';
+
+
+                                            ?>
                                             <div class="progress">
-                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 75%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar <?= $progressWarnaTask; ?>" role="progressbar" style="width: <?= $persentaseProgressTask; ?>%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                             <div class="card-body">
                                                 <div class="card-title">
@@ -122,6 +136,7 @@
                                                     </ul>
                                                     <div class="d-flex align-items-center">
                                                         <i class="material-icons">playlist_add_check</i>
+                                                        <?= updateStatusTask($tm['id_task']); ?>
                                                         <span><?= passedListTask($tm['id_task']); ?>/<?= totalListTask($tm['id_task'])['id']; ?></span>
                                                     </div>
                                                     <div class="dropdown card-options">
@@ -161,7 +176,6 @@
                                                     <a href="<?= base_url(); ?>/task/detailTask/<?= $t['id']; ?>">
                                                         <h6 data-filter-by="text"><?= $t['nama_task']; ?></h6>
                                                     </a>
-
                                                     <span class="text-small"><?= hitungSelisihBatasWaktu($t['batas_task']); ?></span>
                                                 </div>
                                                 <div class="card-meta">

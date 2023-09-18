@@ -45,7 +45,8 @@
                             <i class="material-icons">playlist_add_check</i>
                             <span><?= passedListTask($task['id']); ?>/<?= totalListTask($task['id'])['id']; ?></span>
                         </div>
-
+                        <?= updateStatusTask($idTask); ?>
+                        <?= updateStatusProject($idProject); ?>
                         <span><?= hitungSelisihBatasWaktu($task['batas_task']); ?></span>
                     </div>
                 </div>

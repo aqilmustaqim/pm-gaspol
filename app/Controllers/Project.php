@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Modules\Breadcrumbs\Breadcrumbs;
 use App\Database\Migrations\DetailProject;
 use App\Models\TeamModel;
 use App\Models\UsersModel;
@@ -11,6 +12,8 @@ use App\Models\DetailProjectModel;
 use App\Models\TaskModel;
 use App\Models\DetailTaskModel;
 use App\Models\ListTaskModel;
+use App\libraries\Breadcrumb;
+
 
 use function PHPSTORM_META\map;
 
@@ -25,6 +28,7 @@ class Project extends BaseController
     protected $detailTaskModel;
     protected $taskModel;
     protected $listTaskModel;
+    protected $breadcrumbs;
 
     public function __construct()
     {
@@ -68,11 +72,15 @@ class Project extends BaseController
         // Ambil Data Team
         $team = $this->teamModel->findAll();
 
+        $breadcrumb = [
+            'List Project' => base_url("project/listProject")
+        ];
+
 
 
         $data = [
             'title' => 'PM Gaspol || List Project',
-            'bread' => 'List Project',
+            'bread' => generate_breadcrumb($breadcrumb),
             'fotoMemberProject' => $fotoMemberProject,
             'project' => $allproject,
             'team' => $team
@@ -268,9 +276,15 @@ class Project extends BaseController
         $query = $builder->get();
         $datausers = $query->getResultArray();
 
+        $breadcrumb = [
+            'Team' => base_url('team'),
+            'Detail Team' => base_url("team/detailTeam/" . $dataProject['id_team']),
+            'Detail Project' => base_url("project/detailProject/" . $id)
+        ];
+
         $data = [
             'title' => 'PM Gaspol || Detail Project',
-            'bread' => 'Detail Project',
+            'bread' => generate_breadcrumb($breadcrumb),
             'project' => $dataProject,
             'task' => $dataTask,
             'taskmember' => $dataTaskMember,

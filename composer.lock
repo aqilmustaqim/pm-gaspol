@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b403109849622a65a2b5f29617e56f14",
+    "content-hash": "e6f1cec3007d1686cce17f2e21c52a08",
     "packages": [
         {
             "name": "codeigniter4/framework",
@@ -125,6 +125,44 @@
                 "source": "https://github.com/firebase/php-jwt/tree/v6.3.2"
             },
             "time": "2022-12-19T17:10:46+00:00"
+        },
+        {
+            "name": "geeklabs/ci4-breadcrumbs",
+            "version": "v2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GeekLabsUK/CI4-Breadcrumbs.git",
+                "reference": "dc9609a1cea2f31390b82bb98ba8e7391f2a7e81"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GeekLabsUK/CI4-Breadcrumbs/zipball/dc9609a1cea2f31390b82bb98ba8e7391f2a7e81",
+                "reference": "dc9609a1cea2f31390b82bb98ba8e7391f2a7e81",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Geeklabs\\Breadcrumbs\\": "/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "description": "Simple breadcrum library for Codeigniter 4",
+            "homepage": "https://github.com/GeekLabsUK",
+            "keywords": [
+                "CI4",
+                "CodeIgniter 4",
+                "breadcrumbs",
+                "codeigniter"
+            ],
+            "support": {
+                "issues": "https://github.com/GeekLabsUK/CI4-Breadcrumbs/issues",
+                "source": "https://github.com/GeekLabsUK/CI4-Breadcrumbs/tree/v2.0.2"
+            },
+            "time": "2022-12-15T18:09:10+00:00"
         },
         {
             "name": "kint-php/kint",
@@ -2568,5 +2606,5 @@
         "php": "^7.4 || ^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }

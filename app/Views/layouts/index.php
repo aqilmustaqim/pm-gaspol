@@ -115,13 +115,7 @@
         </div>
         <div class="main-container">
             <div class="navbar bg-white breadcrumb-bar">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html"><?= $bread; ?></a>
-                        </li>
-
-                    </ol>
-                </nav>
+                <?= $bread; ?>
 
                 <div class="dropdown">
                     <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

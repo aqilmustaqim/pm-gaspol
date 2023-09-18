@@ -73,6 +73,23 @@ class Task extends BaseController
         //Menampilkan Data List Task ( ADMIN DAN LEADER )
         $datalist = $this->listTaskModel->where('id_task', $idTask)->findAll();
 
+        $db = \Config\Database::connect();
+        $builder = $db->table('list_task');
+        $builder->select('id_project');
+        $builder->join('task', 'list_task.id_task = task.id');
+        $builder->where('id_task', $idTask);
+        $query = $builder->get();
+        $dataListJoinProject = $query->getRowArray();
+        // Periksa apakah hasil query memiliki data atau tidak
+        if ($dataListJoinProject) {
+            $hasilListTaskJoinProject = $dataListJoinProject['id_project'];
+            // Lakukan sesuatu dengan $dataListJoinProject
+        } else {
+            // Tidak ada data yang ditemukan, tidak perlu melakukan apa-apa
+            $hasilListTaskJoinProject = 'Kosong';
+        }
+
+
         //Menampilkan semua Total Checklist
         $db      = \Config\Database::connect();
         $builder = $db->table('list_task');
@@ -90,12 +107,30 @@ class Task extends BaseController
         $query = $builder->get();
         $totalchecklistdone = $query->getRowArray();
 
+        // ROUTE BUAT BREADCRUMBS
+        $db = \Config\Database::connect();
+        $builder = $db->table('task');
+        $builder->select('task.id as id,id_project,id_team');
+        $builder->join('project', 'task.id_project = project.id');
+        $builder->where('task.id', $idTask);
+        $query = $builder->get();
+        $dataroute = $query->getRowArray();
+
+        $breadcrumb = [
+            'Team' => base_url('team'),
+            'Detail Team' => base_url("team/detailTeam/" . $dataroute['id_team']),
+            'Detail Project' => base_url("project/detailProject/" . $dataroute['id_project']),
+            'Detail Tasks' => base_url("task/detailTask/" . $idTask)
+        ];
+
         $data = [
             'title' => 'PM Gaspol || Detail Task',
-            'bread' => 'Detail Task',
+            'bread' => generate_breadcrumb($breadcrumb),
             'task' => $datatask,
             'membertask' => $memberTask,
             'list' => $datalist,
+            'idTask' => $idTask,
+            'idProject' => $hasilListTaskJoinProject,
             'totalchecklist' => $totalchecklist,
             'totalchecklistdone' => $totalchecklistdone
         ];
