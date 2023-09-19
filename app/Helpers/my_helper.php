@@ -248,12 +248,12 @@ function updateStatusTask($idTask)
                 'id' => $idTask,
                 'status_task' => 1
             ]);
-        } else {
-            $taskModel->save([
-                'id' => $idTask,
-                'status_task' => 0
-            ]);
         }
+    } else {
+        $taskModel->save([
+            'id' => $idTask,
+            'status_task' => 0
+        ]);
     }
     // return $idTask;
 }

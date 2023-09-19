@@ -98,6 +98,7 @@ $routes->post('createChecklist', 'UsersApi::createChecklist/$1', ['filter' => 'a
 
 // 22. Create Project
 $routes->post('createProject', 'UsersApi::createProject');
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

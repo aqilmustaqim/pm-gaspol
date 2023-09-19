@@ -193,6 +193,7 @@
                                                     </ul>
                                                     <div class="d-flex align-items-center">
                                                         <i class="material-icons">playlist_add_check</i>
+                                                        <?= updateStatusTask($t['id']); ?>
                                                         <span><?= passedListTask($t['id']); ?>/<?= totalListTask($t['id'])['id']; ?></span>
                                                     </div>
                                                     <div class="dropdown card-options">
@@ -206,7 +207,7 @@
                                                                 <button class="dropdown-item" data-toggle="modal" data-target="#member-add-task<?= $t['id']; ?>">Add Member</button>
                                                             <?php } ?>
                                                             <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item text-danger" href="#">Archive</a>
+                                                            <a class="dropdown-item text-danger tombol-hapus" href="<?= base_url(); ?>/task/deleteTask/<?= $t['id']; ?>">Delete Task</a>
                                                         </div>
                                                     </div>
                                                 </div>

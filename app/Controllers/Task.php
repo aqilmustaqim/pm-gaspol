@@ -138,6 +138,44 @@ class Task extends BaseController
         return view('task/detailTask', $data);
     }
 
+    public function deleteTask($id)
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url());
+        } else {
+            //Kalau Ada Session
+            //Cek yang login Admin gak , Kalau Bukan Tendang
+            if (session()->get('role_id') != 1) {
+                return redirect()->to(base_url());
+            }
+        }
+
+        $task = $this->taskModel->where('id', $id)->first();
+
+        // Lakukan Delete Tabel Task
+        if ($this->taskModel->delete($id)) {
+            // Hapus juga yang ada di detail task yang id projectnya sama
+            $detailtask = $this->detailTaskModel->where('id_task', $id)->findAll();
+            if ($detailtask) {
+                foreach ($detailtask as $dt) {
+                    $this->detailTaskModel->delete($dt['id']);
+                }
+            }
+
+            // Hapus Juga yang ada di list task ( Checklist )
+            $listtask = $this->listTaskModel->where('id_task', $id)->findAll();
+            if ($listtask) {
+                foreach ($listtask as $lt) {
+                    $this->listTaskModel->delete($lt['id']);
+                }
+            }
+
+            //FlashDatanya
+            session()->setFlashdata('project', 'Menghapus Data Task');
+            return redirect()->to(base_url('project/detailProject/' . $task['id_project']));
+        }
+    }
+
     public function addList()
     {
         //Tangkap Inputan 
