@@ -16,8 +16,17 @@ class Superadmin extends BaseController
         $builder->select('team,id_team');
         $builder->distinct();
         $builder->join('team', 'project.id_team = team.id');
+        $builder->groupBy('team.id');
         $query = $builder->get();
         $team = $query->getResultArray();
+
+        $db      = \Config\Database::connect();
+        $builder = $db->table('project');
+        $builder->select('COUNT(project.nama_project) as jumlah_project');
+        $builder->join('team', 'project.id_team = team.id');
+        $builder->groupBy('team.id');
+        $query = $builder->get();
+        $jumlahProjectTeam = $query->getResultArray();
 
         //Mengambil Data Team Yang Ada Project
         $db      = \Config\Database::connect();
@@ -31,6 +40,8 @@ class Superadmin extends BaseController
 
 
 
+
+
         if (!session()->get('nama')) {
             return redirect()->to(base_url());
         }
@@ -39,6 +50,7 @@ class Superadmin extends BaseController
             'title' => 'PM Gaspol || Dashboard',
             'bread' => 'Dashboard',
             'team' => $team,
+            'jumlahProject' => $jumlahProjectTeam,
             'teamproject' => $teamproject
         ];
 

@@ -12,6 +12,14 @@ foreach ($team as $t) {
     $idTeam .= $idteam;
 }
 
+$jumlahProjectTeam = "";
+
+foreach ($jumlahProject as $jp) {
+    $jumlah = $jp['jumlah_project'];
+
+    $jumlahProjectTeam .= "'$jumlah'" . ",";
+}
+
 
 
 ?>
@@ -81,13 +89,15 @@ foreach ($team as $t) {
     const data = {
         labels: [<?= $totalteam; ?>],
         datasets: [{
-            label: 'My First Dataset',
-            data: [300, 50, 100, 40],
+            label: 'Jumlah Project',
+            data: [<?= $jumlahProjectTeam; ?>],
             backgroundColor: [
                 'rgb(255, 99, 132)',
                 'rgb(54, 162, 235)',
                 'rgb(255, 205, 86)',
                 'rgb(46,139,87)',
+                'rgb(106,90,205)',
+                'rgb(0,0,128)'
             ],
             hoverOffset: 4
         }]

@@ -101,9 +101,6 @@
                                         <!--end of form group-->
                                     </div>
                                 <?php endforeach; ?>
-
-
-
                             </form>
                             <div class="drop-to-delete">
                                 <div class="drag-to-delete-title">
